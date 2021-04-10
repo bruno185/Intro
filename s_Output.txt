@@ -2,409 +2,694 @@
  Line | # File    Line | Line Type   | MX |  Reloc  | Size | Address   Object Code |  Source Code                                                      
 ------+----------------+-------------+----+---------+------+-----------------------+-------------------------------------------------------------------
     1 |  1  s.s      1 | Comment     | 11 |         |    0 | 00/8000               | * ROM routines
-    2 |  1  s.s      2 | Directive   | 11 |         |    0 | 00/8000               |             lst   off            
+    2 |  1  s.s      2 | Directive   | 11 |         |    0 | 00/8000               |             lst     off            
     3 |  1  s.s      3 | Comment     | 11 |         |    0 | 00/8000               | *
-    4 |  1  s.s      4 | Equivalence | 11 |         |    0 | 00/8000               | home        equ   $FC58          
-    5 |  1  s.s      5 | Equivalence | 11 |         |    0 | 00/8000               | text        equ   $FB2F          
-    6 |  1  s.s      6 | Equivalence | 11 |         |    0 | 00/8000               | col80off    equ   $C00C          
-    7 |  1  s.s      7 | Equivalence | 11 |         |    0 | 00/8000               | cout        equ   $FDED          
-    8 |  1  s.s      8 | Equivalence | 11 |         |    0 | 00/8000               | vtab        equ   $FC22          
-    9 |  1  s.s      9 | Equivalence | 11 |         |    0 | 00/8000               | getln       equ   $FD6A          
-   10 |  1  s.s     10 | Equivalence | 11 |         |    0 | 00/8000               | bascalc     equ   $FBC1          
-   11 |  1  s.s     11 | Equivalence | 11 |         |    0 | 00/8000               | cr          equ   $FD8E          ; print carriage return
-   12 |  1  s.s     12 | Equivalence | 11 |         |    0 | 00/8000               | clreop      equ   $FC42          ; clear from cursor to end of page
-   13 |  1  s.s     13 | Equivalence | 11 |         |    0 | 00/8000               | clreol      equ   $FC9C          ; clear from cursor to end of line
-   14 |  1  s.s     14 | Equivalence | 11 |         |    0 | 00/8000               | xtohex      equ   $F944          
-   15 |  1  s.s     15 | Equivalence | 11 |         |    0 | 00/8000               | rdkey       equ   $FD0C          ; wait for keypress
-   16 |  1  s.s     16 | Equivalence | 11 |         |    0 | 00/8000               | auxmov      equ   $C311          
-   17 |  1  s.s     17 | Equivalence | 11 |         |    0 | 00/8000               | xfer        equ   $C314          
-   18 |  1  s.s     18 | Empty       | 11 |         |    0 | 00/8000               |                                  
-   19 |  1  s.s     19 | Comment     | 11 |         |    0 | 00/8000               | * ROM switches
-   20 |  1  s.s     20 | Comment     | 11 |         |    0 | 00/8000               | *
-   21 |  1  s.s     21 | Equivalence | 11 |         |    0 | 00/8000               | graphics    equ   $C050          
-   22 |  1  s.s     22 | Equivalence | 11 |         |    0 | 00/8000               | mixoff      equ   $C052          
-   23 |  1  s.s     23 | Equivalence | 11 |         |    0 | 00/8000               | hires       equ   $C057          
-   24 |  1  s.s     24 | Equivalence | 11 |         |    0 | 00/8000               | page1       equ   $C054          
-   25 |  1  s.s     25 | Equivalence | 11 |         |    0 | 00/8000               | page2       equ   $C055          
-   26 |  1  s.s     26 | Equivalence | 11 |         |    0 | 00/8000               | clr80col    equ   $C000          
-   27 |  1  s.s     27 | Equivalence | 11 |         |    0 | 00/8000               | vbl         equ   $C019          
-   28 |  1  s.s     28 | Comment     | 11 |         |    0 | 00/8000               | *
-   29 |  1  s.s     29 | Equivalence | 11 |         |    0 | 00/8000               | ptr         equ   $06            
-   30 |  1  s.s     30 | Equivalence | 11 |         |    0 | 00/8000               | ptr2        equ   $08            
-   31 |  1  s.s     31 | Comment     | 11 |         |    0 | 00/8000               | * 
-   32 |  1  s.s     32 | Comment     | 11 |         |    0 | 00/8000               | * CONST
-   33 |  1  s.s     33 | Equivalence | 11 |         |    0 | 00/8000               | framemax    equ   $09            
-   34 |  1  s.s     34 | Equivalence | 11 |         |    0 | 00/8000               | posx        equ   $02            ; position in X (in byte, not pixel)
-   35 |  1  s.s     35 | Equivalence | 11 |         |    0 | 00/8000               | posy        equ   $14            ; position in Y (= line #)
-   36 |  1  s.s     36 | Comment     | 11 |         |    0 | 00/8000               | *
-   37 |  1  s.s     37 | Directive   | 11 |         |    0 | 00/8000               |             org   $8000          
-   38 |  1  s.s     38 | Empty       | 11 |         |    0 | 00/8000               |                                  
-   39 |  1  s.s     39 | Code        | 11 |         |    2 | 00/8000 : A9 02       |             lda   #{$02}         
-   40 |  1  s.s     40 | Code        | 11 |         |    3 | 00/8002 : 8D 68 80    |             sta   left           
-   41 |  1  s.s     41 | Code        | 11 |         |    1 | 00/8005 : 18          |             clc                  
-   42 |  1  s.s     42 | Code        | 11 |         |    3 | 00/8006 : 6D 6D 80    |             adc   nbcol          
-   43 |  1  s.s     43 | Code        | 11 |         |    2 | 00/8009 : C9 28       |             cmp   #$28           ; 40 columns max.
-   44 |  1  s.s     44 | Code        | 11 |         |    2 | 00/800B : B0 06       |             bge   n1             
-   45 |  1  s.s     45 | Code        | 11 |         |    3 | 00/800D : 8D 69 80    |             sta   right          
-   46 |  1  s.s     46 | Code        | 11 |         |    3 | 00/8010 : 4C 18 80    |             jmp   n2             
-   47 |  1  s.s     47 | Code        | 11 |         |    2 | 00/8013 : A9 27       | n1          lda   #$27           
-   48 |  1  s.s     48 | Code        | 11 |         |    3 | 00/8015 : 8D 69 80    |             sta   right          
-   49 |  1  s.s     49 | Comment     | 11 |         |    0 | 00/8018               | *
-   50 |  1  s.s     50 | Code        | 11 |         |    2 | 00/8018 : A9 14       | n2          lda   #{$14}         
-   51 |  1  s.s     51 | Code        | 11 |         |    3 | 00/801A : 8D 6A 80    |             sta   top            
-   52 |  1  s.s     52 | Code        | 11 |         |    1 | 00/801D : 18          |             clc                  
-   53 |  1  s.s     53 | Code        | 11 |         |    3 | 00/801E : 6D 6C 80    |             adc   nblig          
-   54 |  1  s.s     54 | Code        | 11 |         |    2 | 00/8021 : C9 C0       |             cmp   #$C0           ; 192 lines max.
-   55 |  1  s.s     55 | Code        | 11 |         |    2 | 00/8023 : B0 06       |             bge   n3             
-   56 |  1  s.s     56 | Code        | 11 |         |    3 | 00/8025 : 8D 6B 80    |             sta   bottom         
-   57 |  1  s.s     57 | Code        | 11 |         |    3 | 00/8028 : 4C 30 80    |             jmp   n4             
-   58 |  1  s.s     58 | Code        | 11 |         |    2 | 00/802B : A9 BF       | n3          lda   #$BF           
-   59 |  1  s.s     59 | Code        | 11 |         |    3 | 00/802D : 8D 6B 80    |             sta   bottom         
-   60 |  1  s.s     60 | Code        | 11 |         |    1 | 00/8030 : EA          | n4          nop                  
-   61 |  1  s.s     61 | Comment     | 11 |         |    0 | 00/8031               | *
-   62 |  1  s.s     62 | Code        | 11 |         |    2 | 00/8031 : A9 80       |             lda   #>cut          
-   63 |  1  s.s     63 | Code        | 11 |         |    2 | 00/8033 : 85 09       |             sta   {$08}+1        
-   64 |  1  s.s     64 | Code        | 11 |         |    2 | 00/8035 : A9 6E       |             lda   #<cut          
-   65 |  1  s.s     65 | Code        | 11 |         |    2 | 00/8037 : 85 08       |             sta   {$08}          
-   66 |  1  s.s     66 | Code        | 11 |         |    3 | 00/8039 : AE 6A 80    | newline     ldx   top            
-   67 |  1  s.s     67 | Code        | 11 |         |    3 | 00/803C : BD B6 83    |             lda   hi,x           
-   68 |  1  s.s     68 | Code        | 11 |         |    2 | 00/803F : 85 07       |             sta   {$06}+1        
-   69 |  1  s.s     69 | Code        | 11 |         |    3 | 00/8041 : BD 76 84    |             lda   lo,x           
-   70 |  1  s.s     70 | Code        | 11 |         |    2 | 00/8044 : 85 06       |             sta   {$06}          
-   71 |  1  s.s     71 | Code        | 11 |         |    3 | 00/8046 : AC 68 80    |             ldy   left           
-   72 |  1  s.s     72 | Code        | 11 |         |    3 | 00/8049 : AD 6E 80    | load        lda   cut            
-   73 |  1  s.s     73 | Code        | 11 |         |    2 | 00/804C : 91 06       |             sta   ({$06}),y      
-   74 |  1  s.s     74 | Code        | 11 |         |    3 | 00/804E : EE 4A 80    |             inc   load+1         
-   75 |  1  s.s     75 | Code        | 11 |         |    2 | 00/8051 : D0 03       |             bne   ok             
-   76 |  1  s.s     76 | Code        | 11 |         |    3 | 00/8053 : EE 4B 80    |             inc   load+2         
-   77 |  1  s.s     77 | Code        | 11 |         |    1 | 00/8056 : C8          | ok          iny                  
-   78 |  1  s.s     78 | Code        | 11 |         |    3 | 00/8057 : CC 69 80    |             cpy   right          
-   79 |  1  s.s     79 | Code        | 11 |         |    2 | 00/805A : D0 ED       |             bne   load           
-   80 |  1  s.s     80 | Code        | 11 |         |    3 | 00/805C : EE 6A 80    |             inc   top            
-   81 |  1  s.s     81 | Code        | 11 |         |    3 | 00/805F : AD 6A 80    |             lda   top            
-   82 |  1  s.s     82 | Code        | 11 |         |    3 | 00/8062 : CD 6B 80    |             cmp   bottom         
-   83 |  1  s.s     83 | Code        | 11 |         |    2 | 00/8065 : D0 D2       |             bne   newline        
-   84 |  1  s.s     84 | Code        | 11 |         |    1 | 00/8067 : 60          |             rts                  
-   85 |  1  s.s     85 | Empty       | 11 |         |    0 | 00/8068               |                                  
-   86 |  1  s.s     86 | Empty       | 11 |         |    0 | 00/8068               |                                  
-   87 |  1  s.s     87 | Empty       | 11 |         |    0 | 00/8068               |                                  
-   88 |  1  s.s     88 | Empty       | 11 |         |    0 | 00/8068               |                                  
-   89 |  1  s.s     89 | Data        | 11 |         |    1 | 00/8068 : 00          | left        hex   00             
-   90 |  1  s.s     90 | Data        | 11 |         |    1 | 00/8069 : 00          | right       hex   00             
-   91 |  1  s.s     91 | Data        | 11 |         |    1 | 00/806A : 00          | top         hex   00             
-   92 |  1  s.s     92 | Data        | 11 |         |    1 | 00/806B : 00          | bottom      hex   00             
-   93 |  1  s.s     93 | Comment     | 11 |         |    0 | 00/806C               | *   
-   94 |  1  s.s     94 | Data        | 11 |         |    1 | 00/806C : 1C          | nblig       hex   1c             
-   95 |  1  s.s     95 | Data        | 11 |         |    1 | 00/806D : 1E          | nbcol       hex   1e             
-   96 |  1  s.s     96 | Data        | 11 |         |    8 | 00/806E : 00 00 00 00 | cut         hex   0000000000000000
+    4 |  1  s.s      4 | Equivalence | 11 |         |    0 | 00/8000               | home        equ     $FC58          
+    5 |  1  s.s      5 | Equivalence | 11 |         |    0 | 00/8000               | text        equ     $FB2F          
+    6 |  1  s.s      6 | Equivalence | 11 |         |    0 | 00/8000               | col80off    equ     $C00C          
+    7 |  1  s.s      7 | Equivalence | 11 |         |    0 | 00/8000               | cout        equ     $FDED          
+    8 |  1  s.s      8 | Equivalence | 11 |         |    0 | 00/8000               | vtab        equ     $FC22          
+    9 |  1  s.s      9 | Equivalence | 11 |         |    0 | 00/8000               | getln       equ     $FD6A          
+   10 |  1  s.s     10 | Equivalence | 11 |         |    0 | 00/8000               | bascalc     equ     $FBC1          
+   11 |  1  s.s     11 | Equivalence | 11 |         |    0 | 00/8000               | cr          equ     $FD8E          ; print carriage return
+   12 |  1  s.s     12 | Equivalence | 11 |         |    0 | 00/8000               | clreop      equ     $FC42          ; clear from cursor to end of page
+   13 |  1  s.s     13 | Equivalence | 11 |         |    0 | 00/8000               | clreol      equ     $FC9C          ; clear from cursor to end of line
+   14 |  1  s.s     14 | Equivalence | 11 |         |    0 | 00/8000               | xtohex      equ     $F944          
+   15 |  1  s.s     15 | Equivalence | 11 |         |    0 | 00/8000               | rdkey       equ     $FD0C          ; wait for keypress
+   16 |  1  s.s     16 | Equivalence | 11 |         |    0 | 00/8000               | auxmov      equ     $C311          
+   17 |  1  s.s     17 | Equivalence | 11 |         |    0 | 00/8000               | xfer        equ     $C314          
+   18 |  1  s.s     18 | Equivalence | 11 |         |    0 | 00/8000               | wait        equ     $FCA8          
+   19 |  1  s.s     19 | Empty       | 11 |         |    0 | 00/8000               |                                    
+   20 |  1  s.s     20 | Comment     | 11 |         |    0 | 00/8000               | * ROM switches
+   21 |  1  s.s     21 | Comment     | 11 |         |    0 | 00/8000               | *
+   22 |  1  s.s     22 | Equivalence | 11 |         |    0 | 00/8000               | graphics    equ     $C050          
+   23 |  1  s.s     23 | Equivalence | 11 |         |    0 | 00/8000               | mixoff      equ     $C052          
+   24 |  1  s.s     24 | Equivalence | 11 |         |    0 | 00/8000               | hires       equ     $C057          
+   25 |  1  s.s     25 | Equivalence | 11 |         |    0 | 00/8000               | page1       equ     $C054          
+   26 |  1  s.s     26 | Equivalence | 11 |         |    0 | 00/8000               | page2       equ     $C055          
+   27 |  1  s.s     27 | Equivalence | 11 |         |    0 | 00/8000               | clr80col    equ     $C000          
+   28 |  1  s.s     28 | Equivalence | 11 |         |    0 | 00/8000               | vbl         equ     $C019          
+   29 |  1  s.s     29 | Equivalence | 11 |         |    0 | 00/8000               | spkr        equ     $C030          
+   30 |  1  s.s     30 | Comment     | 11 |         |    0 | 00/8000               | *
+   31 |  1  s.s     31 | Equivalence | 11 |         |    0 | 00/8000               | ptr         equ     $06            
+   32 |  1  s.s     32 | Equivalence | 11 |         |    0 | 00/8000               | ptr2        equ     $08            
+   33 |  1  s.s     33 | Comment     | 11 |         |    0 | 00/8000               | * 
+   34 |  1  s.s     34 | Comment     | 11 |         |    0 | 00/8000               | * CONST
+   35 |  1  s.s     35 | Equivalence | 11 |         |    0 | 00/8000               | framemax    equ     $09            
+   36 |  1  s.s     36 | Equivalence | 11 |         |    0 | 00/8000               | posx        equ     $05            ; position in X (in byte, not pixel)
+   37 |  1  s.s     37 | Equivalence | 11 |         |    0 | 00/8000               | posy        equ     $3F            ; position in Y (= line #)
+   38 |  1  s.s     38 | Equivalence | 11 |         |    0 | 00/8000               | posx2       equ     $0F            
+   39 |  1  s.s     39 | Equivalence | 11 |         |    0 | 00/8000               | posy2       equ     $64            
+   40 |  1  s.s     40 | Equivalence | 11 |         |    0 | 00/8000               | delay       equ     $01            
+   41 |  1  s.s     41 | Comment     | 11 |         |    0 | 00/8000               | *
+   42 |  1  s.s     42 | Directive   | 11 |         |    0 | 00/8000               |             org     $8000          
+   43 |  1  s.s     43 | Empty       | 11 |         |    0 | 00/8000               |                                    
+   44 |  1  s.s     44 | Comment     | 11 |         |    0 | 00/8000               | * * * * * * * * *
+   45 |  1  s.s     45 | Comment     | 11 |         |    0 | 00/8000               | *     MACROS    *
+   46 |  1  s.s     46 | Comment     | 11 |         |    0 | 00/8000               | * * * * * * * * *
+   47 |  1  s.s     47 | Comment     | 11 |         |    0 | 00/8000               | *
+   48 |  1  s.s     48 | Directive   | 11 |         |    0 | 00/8000               |             DO      0              
+   49 |  1  s.s    102 | Directive   | 11 |         |    0 | 00/8000               |             FIN                    
+   50 |  1  s.s    103 | Empty       | 11 |         |    0 | 00/8000               |                                    
+   51 |  1  s.s    104 | Comment     | 11 |         |    0 | 00/8000               | * BEGIN
+   52 |  1  s.s    105 | Comment     | 11 |         |    0 | 00/8000               | * setup vars for limits in HGR screen
+   53 |  1  s.s    106 | Macro       | 11 |         |    0 | 00/8000               |             setvar  #{$05};#{$3F};nbcol;nblig;left;right;top;bottom
+   54 |  1  s.s    106 | Code        | 11 |         |    2 | 00/8000 : A9 05       |             lda     #{$05}         ; posx
+   55 |  1  s.s    106 | Code        | 11 |         |    3 | 00/8002 : 8D 32 82    |             sta     left           ; left
+   56 |  1  s.s    106 | Code        | 11 |         |    1 | 00/8005 : 18          |             clc                    
+   57 |  1  s.s    106 | Code        | 11 |         |    3 | 00/8006 : 6D 9C 82    |             adc     nbcol          ; nbcol
+   58 |  1  s.s    106 | Code        | 11 |         |    2 | 00/8009 : C9 28       |             cmp     #$28           ; 40 columns max.
+   59 |  1  s.s    106 | Code        | 11 |         |    2 | 00/800B : B0 06       |             bge     ozunid_1       
+   60 |  1  s.s    106 | Code        | 11 |         |    3 | 00/800D : 8D 33 82    |             sta     right          ; right
+   61 |  1  s.s    106 | Code        | 11 |         |    3 | 00/8010 : 4C 18 80    |             jmp     ozunid_2       
+   62 |  1  s.s    106 | Code        | 11 |         |    2 | 00/8013 : A9 27       | ozunid_1    lda     #$27           
+   63 |  1  s.s    106 | Code        | 11 |         |    3 | 00/8015 : 8D 33 82    |             sta     right          ; right
+   64 |  1  s.s    106 | Code        | 11 |         |    2 | 00/8018 : A9 3F       | ozunid_2    lda     #{$3F}         ; posy
+   65 |  1  s.s    106 | Code        | 11 |         |    3 | 00/801A : 8D 34 82    |             sta     top            ; top
+   66 |  1  s.s    106 | Code        | 11 |         |    1 | 00/801D : 18          |             clc                    
+   67 |  1  s.s    106 | Code        | 11 |         |    3 | 00/801E : 6D 9B 82    |             adc     nblig          ; nblig
+   68 |  1  s.s    106 | Code        | 11 |         |    2 | 00/8021 : C9 C0       |             cmp     #$C0           ; 192 lines max.
+   69 |  1  s.s    106 | Code        | 11 |         |    2 | 00/8023 : B0 06       |             bge     ozunid_3       
+   70 |  1  s.s    106 | Code        | 11 |         |    3 | 00/8025 : 8D 35 82    |             sta     bottom         ; bottom
+   71 |  1  s.s    106 | Code        | 11 |         |    3 | 00/8028 : 4C 30 80    |             jmp     ozunid_4       
+   72 |  1  s.s    106 | Code        | 11 |         |    2 | 00/802B : A9 BF       | ozunid_3    lda     #$BF           
+   73 |  1  s.s    106 | Code        | 11 |         |    3 | 00/802D : 8D 35 82    |             sta     bottom         ; bottom
+   74 |  1  s.s    106 | Code        | 11 |         |    1 | 00/8030 : EA          | ozunid_4    nop                    
+   75 |  1  s.s    107 | Comment     | 11 |         |    0 | 00/8031               | * save tune pointers
+   76 |  1  s.s    108 | Code        | 11 |         |    3 | 00/8031 : AD 46 81    |             lda     play+1         
+   77 |  1  s.s    109 | Code        | 11 |         |    3 | 00/8034 : 8D 90 81    |             sta     saveptr        
+   78 |  1  s.s    110 | Code        | 11 |         |    3 | 00/8037 : AD 47 81    |             lda     play+2         
+   79 |  1  s.s    111 | Code        | 11 |         |    3 | 00/803A : 8D 91 81    |             sta     saveptr+1      
+   80 |  1  s.s    112 | Comment     | 11 |         |    0 | 00/803D               | *
+   81 |  1  s.s    113 | Code        | 11 |         |    3 | 00/803D : AD 4E 81    |             lda     play2+1        
+   82 |  1  s.s    114 | Code        | 11 |         |    3 | 00/8040 : 8D 92 81    |             sta     saveptr+2      
+   83 |  1  s.s    115 | Code        | 11 |         |    3 | 00/8043 : AD 4F 81    |             lda     play2+2        
+   84 |  1  s.s    116 | Code        | 11 |         |    3 | 00/8046 : 8D 93 81    |             sta     saveptr+3      
+   85 |  1  s.s    117 | Comment     | 11 |         |    0 | 00/8049               | *
+   86 |  1  s.s    118 | Code        | 11 |         |    3 | 00/8049 : AD 54 81    |             lda     play3+1        
+   87 |  1  s.s    119 | Code        | 11 |         |    3 | 00/804C : 8D 94 81    |             sta     saveptr+4      
+   88 |  1  s.s    120 | Code        | 11 |         |    3 | 00/804F : AD 55 81    |             lda     play3+2        
+   89 |  1  s.s    121 | Code        | 11 |         |    3 | 00/8052 : 8D 95 81    |             sta     saveptr+5      
+   90 |  1  s.s    122 | Comment     | 11 |         |    0 | 00/8055               | *
+   91 |  1  s.s    123 | Comment     | 11 |         |    0 | 00/8055               | * paint shape 1
+   92 |  1  s.s    124 | Comment     | 11 |         |    0 | 00/8055               | *
+   93 |  1  s.s    125 | Code        | 11 |         |    2 | 00/8055 : A9 82       |             lda     #>cut          ; (re)init shape pointer
+   94 |  1  s.s    126 | Code        | 11 |         |    3 | 00/8057 : 8D 71 80    |             sta     load+2         
+   95 |  1  s.s    127 | Code        | 11 |         |    2 | 00/805A : A9 9D       |             lda     #<cut          
+   96 |  1  s.s    128 | Code        | 11 |         |    3 | 00/805C : 8D 70 80    |             sta     load+1         
+   97 |  1  s.s    129 | Code        | 11 |         |    3 | 00/805F : AE 34 82    | newline     ldx     top            ; outter loop starts here
+   98 |  1  s.s    130 | Code        | 11 |         |    3 | 00/8062 : BD E5 85    |             lda     hi,x           ; from top to botton
+   99 |  1  s.s    131 | Code        | 11 |         |    2 | 00/8065 : 85 07       |             sta     {$06}+1        
+  100 |  1  s.s    132 | Code        | 11 |         |    3 | 00/8067 : BD A5 86    |             lda     lo,x           
+  101 |  1  s.s    133 | Code        | 11 |         |    2 | 00/806A : 85 06       |             sta     {$06}          
+  102 |  1  s.s    134 | Code        | 11 |         |    3 | 00/806C : AC 32 82    |             ldy     left           
+  103 |  1  s.s    135 | Code        | 11 |         |    3 | 00/806F : AD 9D 82    | load        lda     cut            ; inner loop starts here
+  104 |  1  s.s    136 | Code        | 11 |         |    2 | 00/8072 : 91 06       |             sta     ({$06}),y      ; from left to right
+  105 |  1  s.s    137 | Code        | 11 |         |    3 | 00/8074 : EE 70 80    |             inc     load+1         ; update shape pointer
+  106 |  1  s.s    138 | Code        | 11 |         |    2 | 00/8077 : D0 03       |             bne     ok             
+  107 |  1  s.s    139 | Code        | 11 |         |    3 | 00/8079 : EE 71 80    |             inc     load+2         
+  108 |  1  s.s    140 | Code        | 11 |         |    1 | 00/807C : C8          | ok          iny                    ; next byte un row
+  109 |  1  s.s    141 | Code        | 11 |         |    3 | 00/807D : CC 33 82    |             cpy     right          ; end of line ?
+  110 |  1  s.s    142 | Code        | 11 |         |    2 | 00/8080 : D0 ED       |             bne     load           
+  111 |  1  s.s    143 | Comment     | 11 |         |    0 | 00/8082               | *
+  112 |  1  s.s    144 | Code        | 11 |         |    3 | 00/8082 : AD 34 82    |             lda     top            ; play evrery 4 lines
+  113 |  1  s.s    145 | Code        | 11 |         |    2 | 00/8085 : 29 03       |             and     #03            
+  114 |  1  s.s    146 | Code        | 11 |         |    2 | 00/8087 : D0 03       |             bne     noplay         
+  115 |  1  s.s    147 | Code        | 11 |         |    3 | 00/8089 : 20 45 81    |             jsr     play           
+  116 |  1  s.s    148 | Comment     | 11 |         |    0 | 00/808C               | *
+  117 |  1  s.s    149 | Code        | 11 |         |    3 | 00/808C : EE 34 82    | noplay      inc     top            
+  118 |  1  s.s    150 | Code        | 11 |         |    3 | 00/808F : AD 34 82    |             lda     top            
+  119 |  1  s.s    151 | Code        | 11 |         |    3 | 00/8092 : CD 35 82    |             cmp     bottom         ; last line ?
+  120 |  1  s.s    152 | Code        | 11 |         |    2 | 00/8095 : F0 03       |             beq     endtune        
+  121 |  1  s.s    153 | Code        | 11 |         |    3 | 00/8097 : 4C 5F 80    |             jmp     newline        
+  122 |  1  s.s    154 | Comment     | 11 |         |    0 | 00/809A               | *
+  123 |  1  s.s    155 | Empty       | 11 |         |    0 | 00/809A               | endtune                            
+  124 |  1  s.s    156 | Code        | 11 |         |    3 | 00/809A : AD 46 81    |             lda     play+1         ; get value
+  125 |  1  s.s    157 | Code        | 11 |         |    2 | 00/809D : 85 08       |             sta     {$08}          ; pointed by play+1
+  126 |  1  s.s    158 | Code        | 11 |         |    3 | 00/809F : AD 47 81    |             lda     play+2         ; to check tune has finished
+  127 |  1  s.s    159 | Code        | 11 |         |    2 | 00/80A2 : 85 09       |             sta     {$08}+1        
+  128 |  1  s.s    160 | Code        | 11 |         |    2 | 00/80A4 : A0 00       |             ldy     #$00           
+  129 |  1  s.s    161 | Code        | 11 |         |    2 | 00/80A6 : B1 08       |             lda     ({$08}),y      
+  130 |  1  s.s    162 | Code        | 11 |         |    2 | 00/80A8 : F0 06       |             beq     endprog        ; 0 = flag for end of tune
+  131 |  1  s.s    163 | Code        | 11 |         |    3 | 00/80AA : 20 45 81    |             jsr     play           ; else play
+  132 |  1  s.s    164 | Code        | 11 |         |    3 | 00/80AD : 4C 9A 80    |             jmp     endtune        
+  133 |  1  s.s    165 | Comment     | 11 |         |    0 | 00/80B0               | * restore tune pointers
+  134 |  1  s.s    166 | Comment     | 11 |         |    0 | 00/80B0               | * in self modified code 
+  135 |  1  s.s    167 | Code        | 11 |         |    3 | 00/80B0 : AD 90 81    | endprog     lda     saveptr        
+  136 |  1  s.s    168 | Code        | 11 |         |    3 | 00/80B3 : 8D 46 81    |             sta     play+1         
+  137 |  1  s.s    169 | Code        | 11 |         |    3 | 00/80B6 : AD 91 81    |             lda     saveptr+1      
+  138 |  1  s.s    170 | Code        | 11 |         |    3 | 00/80B9 : 8D 47 81    |             sta     play+2         
+  139 |  1  s.s    171 | Comment     | 11 |         |    0 | 00/80BC               | *
+  140 |  1  s.s    172 | Code        | 11 |         |    3 | 00/80BC : AD 92 81    |             lda     saveptr+2      
+  141 |  1  s.s    173 | Code        | 11 |         |    3 | 00/80BF : 8D 4E 81    |             sta     play2+1        
+  142 |  1  s.s    174 | Code        | 11 |         |    3 | 00/80C2 : AD 93 81    |             lda     saveptr+3      
+  143 |  1  s.s    175 | Code        | 11 |         |    3 | 00/80C5 : 8D 55 81    |             sta     play3+2        
+  144 |  1  s.s    176 | Comment     | 11 |         |    0 | 00/80C8               | *
+  145 |  1  s.s    177 | Code        | 11 |         |    3 | 00/80C8 : AD 94 81    |             lda     saveptr+4      
+  146 |  1  s.s    178 | Code        | 11 |         |    3 | 00/80CB : 8D 54 81    |             sta     play3+1        
+  147 |  1  s.s    179 | Code        | 11 |         |    3 | 00/80CE : AD 95 81    |             lda     saveptr+5      
+  148 |  1  s.s    180 | Code        | 11 |         |    3 | 00/80D1 : 8D 55 81    |             sta     play3+2        
+  149 |  1  s.s    181 | Empty       | 11 |         |    0 | 00/80D4               |                                    
+  150 |  1  s.s    182 | Macro       | 11 |         |    0 | 00/80D4               |             setvar  #{$0F};#{$64};nbcol2;nblig2;left;right;top;bottom
+  151 |  1  s.s    182 | Code        | 11 |         |    2 | 00/80D4 : A9 0F       |             lda     #{$0F}         ; posx
+  152 |  1  s.s    182 | Code        | 11 |         |    3 | 00/80D6 : 8D 32 82    |             sta     left           ; left
+  153 |  1  s.s    182 | Code        | 11 |         |    1 | 00/80D9 : 18          |             clc                    
+  154 |  1  s.s    182 | Code        | 11 |         |    3 | 00/80DA : 6D 37 82    |             adc     nbcol2         ; nbcol
+  155 |  1  s.s    182 | Code        | 11 |         |    2 | 00/80DD : C9 28       |             cmp     #$28           ; 40 columns max.
+  156 |  1  s.s    182 | Code        | 11 |         |    2 | 00/80DF : B0 06       |             bge     ozunid_5       
+  157 |  1  s.s    182 | Code        | 11 |         |    3 | 00/80E1 : 8D 33 82    |             sta     right          ; right
+  158 |  1  s.s    182 | Code        | 11 |         |    3 | 00/80E4 : 4C EC 80    |             jmp     ozunid_6       
+  159 |  1  s.s    182 | Code        | 11 |         |    2 | 00/80E7 : A9 27       | ozunid_5    lda     #$27           
+  160 |  1  s.s    182 | Code        | 11 |         |    3 | 00/80E9 : 8D 33 82    |             sta     right          ; right
+  161 |  1  s.s    182 | Code        | 11 |         |    2 | 00/80EC : A9 64       | ozunid_6    lda     #{$64}         ; posy
+  162 |  1  s.s    182 | Code        | 11 |         |    3 | 00/80EE : 8D 34 82    |             sta     top            ; top
+  163 |  1  s.s    182 | Code        | 11 |         |    1 | 00/80F1 : 18          |             clc                    
+  164 |  1  s.s    182 | Code        | 11 |         |    3 | 00/80F2 : 6D 36 82    |             adc     nblig2         ; nblig
+  165 |  1  s.s    182 | Code        | 11 |         |    2 | 00/80F5 : C9 C0       |             cmp     #$C0           ; 192 lines max.
+  166 |  1  s.s    182 | Code        | 11 |         |    2 | 00/80F7 : B0 06       |             bge     ozunid_7       
+  167 |  1  s.s    182 | Code        | 11 |         |    3 | 00/80F9 : 8D 35 82    |             sta     bottom         ; bottom
+  168 |  1  s.s    182 | Code        | 11 |         |    3 | 00/80FC : 4C 04 81    |             jmp     ozunid_8       
+  169 |  1  s.s    182 | Code        | 11 |         |    2 | 00/80FF : A9 BF       | ozunid_7    lda     #$BF           
+  170 |  1  s.s    182 | Code        | 11 |         |    3 | 00/8101 : 8D 35 82    |             sta     bottom         ; bottom
+  171 |  1  s.s    182 | Code        | 11 |         |    1 | 00/8104 : EA          | ozunid_8    nop                    
+  172 |  1  s.s    183 | Code        | 11 |         |    3 | 00/8105 : 20 09 81    |             jsr     shapehk        
+  173 |  1  s.s    184 | Code        | 11 |         |    1 | 00/8108 : 60          |             rts                    ; end of program
+  174 |  1  s.s    185 | Comment     | 11 |         |    0 | 00/8109               | *
+  175 |  1  s.s    186 | Comment     | 11 |         |    0 | 00/8109               | *
+  176 |  1  s.s    187 | Code        | 11 |         |    2 | 00/8109 : A9 82       | shapehk     lda     #>hitk         ; (re)init shape pointer
+  177 |  1  s.s    188 | Code        | 11 |         |    3 | 00/810B : 8D 25 81    |             sta     load2+2        
+  178 |  1  s.s    189 | Code        | 11 |         |    2 | 00/810E : A9 38       |             lda     #<hitk         
+  179 |  1  s.s    190 | Code        | 11 |         |    3 | 00/8110 : 8D 24 81    |             sta     load2+1        
+  180 |  1  s.s    191 | Code        | 11 |         |    3 | 00/8113 : AE 34 82    | newln2      ldx     top            ; outter loop starts here
+  181 |  1  s.s    192 | Code        | 11 |         |    3 | 00/8116 : BD E5 85    |             lda     hi,x           ; from top to botton
+  182 |  1  s.s    193 | Code        | 11 |         |    2 | 00/8119 : 85 07       |             sta     {$06}+1        
+  183 |  1  s.s    194 | Code        | 11 |         |    3 | 00/811B : BD A5 86    |             lda     lo,x           
+  184 |  1  s.s    195 | Code        | 11 |         |    2 | 00/811E : 85 06       |             sta     {$06}          
+  185 |  1  s.s    196 | Code        | 11 |         |    3 | 00/8120 : AC 32 82    |             ldy     left           
+  186 |  1  s.s    197 | Code        | 11 |         |    3 | 00/8123 : AD 38 82    | load2       lda     hitk           ; inner loop starts here
+  187 |  1  s.s    198 | Code        | 11 |         |    2 | 00/8126 : 91 06       |             sta     ({$06}),y      ; from left to right
+  188 |  1  s.s    199 | Code        | 11 |         |    3 | 00/8128 : EE 24 81    |             inc     load2+1        ; update shape pointer
+  189 |  1  s.s    200 | Code        | 11 |         |    2 | 00/812B : D0 03       |             bne     ok2            
+  190 |  1  s.s    201 | Code        | 11 |         |    3 | 00/812D : EE 25 81    |             inc     load2+2        
+  191 |  1  s.s    202 | Code        | 11 |         |    1 | 00/8130 : C8          | ok2         iny                    ; next byte un row
+  192 |  1  s.s    203 | Code        | 11 |         |    3 | 00/8131 : CC 33 82    |             cpy     right          ; end of line ?
+  193 |  1  s.s    204 | Code        | 11 |         |    2 | 00/8134 : D0 ED       |             bne     load2          
+  194 |  1  s.s    205 | Code        | 11 |         |    3 | 00/8136 : EE 34 82    |             inc     top            
+  195 |  1  s.s    206 | Code        | 11 |         |    3 | 00/8139 : AD 34 82    |             lda     top            
+  196 |  1  s.s    207 | Code        | 11 |         |    3 | 00/813C : CD 35 82    |             cmp     bottom         ; last line ?
+  197 |  1  s.s    208 | Code        | 11 |         |    2 | 00/813F : F0 03       |             beq     endshap2       
+  198 |  1  s.s    209 | Code        | 11 |         |    3 | 00/8141 : 4C 13 81    |             jmp     newln2         
+  199 |  1  s.s    210 | Code        | 11 |         |    1 | 00/8144 : 60          | endshap2    rts                    
+  200 |  1  s.s    211 | Empty       | 11 |         |    0 | 00/8145               |                                    
+  201 |  1  s.s    212 | Code        | 11 |         |    3 | 00/8145 : AD 96 81    | play        lda     tune           ; self modified address
+  202 |  1  s.s    213 | Code        | 11 |         |    2 | 00/8148 : F0 45       |             beq     playend        
+  203 |  1  s.s    214 | Code        | 11 |         |    3 | 00/814A : 8D 2E 82    |             sta     pitch          ; set pitch
+  204 |  1  s.s    215 | Code        | 11 |         |    3 | 00/814D : AD 97 81    | play2       lda     tune+1         ; self modified address
+  205 |  1  s.s    216 | Code        | 11 |         |    3 | 00/8150 : 8D 30 82    |             sta     lengthhi       ; set duration (lo byte)
+  206 |  1  s.s    217 | Code        | 11 |         |    3 | 00/8153 : AD 98 81    | play3       lda     tune+2         ; self modified address
+  207 |  1  s.s    218 | Code        | 11 |         |    3 | 00/8156 : 8D 2F 82    |             sta     lengthlo       ; set duration (hi byte)
+  208 |  1  s.s    219 | Comment     | 11 |         |    0 | 00/8159               | * self modification
+  209 |  1  s.s    220 | Macro       | 11 |         |    0 | 00/8159               |             addval  play+1;#$03    ; adjust pointer to tune
+  210 |  1  s.s    220 | Code        | 11 |         |    3 | 00/8159 : AD 46 81    |             lda     play+1         
+  211 |  1  s.s    220 | Code        | 11 |         |    1 | 00/815C : 18          |             clc                    
+  212 |  1  s.s    220 | Code        | 11 |         |    2 | 00/815D : 69 03       |             adc     #$03           
+  213 |  1  s.s    220 | Code        | 11 |         |    3 | 00/815F : 8D 46 81    |             sta     play+1         
+  214 |  1  s.s    220 | Code        | 11 |         |    3 | 00/8162 : AD 47 81    |             lda     play+1+1       
+  215 |  1  s.s    220 | Code        | 11 |         |    2 | 00/8165 : 69 00       |             adc     #$00           
+  216 |  1  s.s    220 | Code        | 11 |         |    3 | 00/8167 : 8D 47 81    |             sta     play+1+1       
+  217 |  1  s.s    221 | Macro       | 11 |         |    0 | 00/816A               |             addval  play2+1;#$03   ; for next note
+  218 |  1  s.s    221 | Code        | 11 |         |    3 | 00/816A : AD 4E 81    |             lda     play2+1        
+  219 |  1  s.s    221 | Code        | 11 |         |    1 | 00/816D : 18          |             clc                    
+  220 |  1  s.s    221 | Code        | 11 |         |    2 | 00/816E : 69 03       |             adc     #$03           
+  221 |  1  s.s    221 | Code        | 11 |         |    3 | 00/8170 : 8D 4E 81    |             sta     play2+1        
+  222 |  1  s.s    221 | Code        | 11 |         |    3 | 00/8173 : AD 4F 81    |             lda     play2+1+1      
+  223 |  1  s.s    221 | Code        | 11 |         |    2 | 00/8176 : 69 00       |             adc     #$00           
+  224 |  1  s.s    221 | Code        | 11 |         |    3 | 00/8178 : 8D 4F 81    |             sta     play2+1+1      
+  225 |  1  s.s    222 | Macro       | 11 |         |    0 | 00/817B               |             addval  play3+1;#$03   
+  226 |  1  s.s    222 | Code        | 11 |         |    3 | 00/817B : AD 54 81    |             lda     play3+1        
+  227 |  1  s.s    222 | Code        | 11 |         |    1 | 00/817E : 18          |             clc                    
+  228 |  1  s.s    222 | Code        | 11 |         |    2 | 00/817F : 69 03       |             adc     #$03           
+  229 |  1  s.s    222 | Code        | 11 |         |    3 | 00/8181 : 8D 54 81    |             sta     play3+1        
+  230 |  1  s.s    222 | Code        | 11 |         |    3 | 00/8184 : AD 55 81    |             lda     play3+1+1      
+  231 |  1  s.s    222 | Code        | 11 |         |    2 | 00/8187 : 69 00       |             adc     #$00           
+  232 |  1  s.s    222 | Code        | 11 |         |    3 | 00/8189 : 8D 55 81    |             sta     play3+1+1      
+  233 |  1  s.s    223 | Comment     | 11 |         |    0 | 00/818C               | *
+  234 |  1  s.s    224 | Code        | 11 |         |    3 | 00/818C : 20 B2 81    |             jsr     sound          ; play a note
+  235 |  1  s.s    225 | Code        | 11 |         |    1 | 00/818F : 60          | playend     rts                    
+  236 |  1  s.s    226 | Empty       | 11 |         |    0 | 00/8190               |                                    
+  237 |  1  s.s    227 | Data        | 11 |         |    6 | 00/8190 : 00 00 00 00 | saveptr     ds      6,0            
+      |                |             |    |         |      |           00 00       |
+  238 |  1  s.s    228 | Comment     | 11 |         |    0 | 00/8196               | *
+  239 |  1  s.s    229 | Data        | 11 |         |    3 | 00/8196 : 52 03 A4    | tune        hex     5203A4         ; note20
+  240 |  1  s.s    230 | Data        | 11 |         |    3 | 00/8199 : 52 02 0B    |             hex     52020B         ; note20
+  241 |  1  s.s    231 | Data        | 11 |         |    3 | 00/819C : 4E 03 DB    |             hex     4E03DB         ; note21
+  242 |  1  s.s    232 | Data        | 11 |         |    3 | 00/819F : 4E 02 0B    |             hex     4E020B         ; note21
+  243 |  1  s.s    233 | Data        | 11 |         |    3 | 00/81A2 : 49 04 16    |             hex     490416         ; note22
+  244 |  1  s.s    234 | Data        | 11 |         |    3 | 00/81A5 : 49 02 0B    |             hex     49020B         ; note22
+  245 |  1  s.s    235 | Data        | 11 |         |    3 | 00/81A8 : 4E 03 DB    |             hex     4E03DB         ; note21
+  246 |  1  s.s    236 | Data        | 11 |         |    3 | 00/81AB : 4E 02 0B    |             hex     4E020B         ; note21
+  247 |  1  s.s    237 | Data        | 11 |         |    3 | 00/81AE : 52 03 A4    |             hex     5203A4         ; note20
+  248 |  1  s.s    238 | Comment     | 11 |         |    0 | 00/81B1               | *        hex 52020B      ; note20
+  249 |  1  s.s    239 | Data        | 11 |         |    1 | 00/81B1 : 00          |             hex     00             
+  250 |  1  s.s    240 | Empty       | 11 |         |    0 | 00/81B2               |                                    
+  251 |  1  s.s    241 | Comment     | 11 |         |    0 | 00/81B2               | * play a note  
+  252 |  1  s.s    242 | Comment     | 11 |         |    0 | 00/81B2               | * with diration lo/hi and pitch variables      
+  253 |  1  s.s    243 | Code        | 11 |         |    3 | 00/81B2 : AC 2F 82    | sound       ldy     lengthlo       
+  254 |  1  s.s    244 | Code        | 11 |         |    3 | 00/81B5 : AD 30 C0    | bip         lda     $c030          ;4 cycles
+  255 |  1  s.s    245 | Code        | 11 |         |    3 | 00/81B8 : AE 2E 82    |             ldx     pitch          ;3 cycles
+  256 |  1  s.s    246 | Code        | 11 |         |    1 | 00/81BB : EA          | inloop      nop                    ;2 cycles
+  257 |  1  s.s    247 | Code        | 11 |         |    1 | 00/81BC : EA          |             nop                    ;2 cycles
+  258 |  1  s.s    248 | Code        | 11 |         |    1 | 00/81BD : EA          |             nop                    ;2 cycles
+  259 |  1  s.s    249 | Code        | 11 |         |    1 | 00/81BE : EA          |             nop                    ;2 cycles
+  260 |  1  s.s    250 | Code        | 11 |         |    1 | 00/81BF : CA          |             dex                    ;2 cycles
+  261 |  1  s.s    251 | Code        | 11 |         |    2 | 00/81C0 : D0 F9       |             bne     inloop         ;3 cycles
+  262 |  1  s.s    252 | Code        | 11 |         |    1 | 00/81C2 : 88          |             dey                    ;2 cycles
+  263 |  1  s.s    253 | Code        | 11 |         |    2 | 00/81C3 : D0 F0       |             bne     bip            ;3 cycles
+  264 |  1  s.s    254 | Code        | 11 |         |    3 | 00/81C5 : CE 30 82    |             dec     lengthhi       ;5 cycles
+  265 |  1  s.s    255 | Code        | 11 |         |    2 | 00/81C8 : D0 EB       |             bne     bip            ;3 cycles
+  266 |  1  s.s    256 | Code        | 11 |         |    1 | 00/81CA : 60          |             rts                    
+  267 |  1  s.s    257 | Comment     | 11 |         |    0 | 00/81CB               | *
+  268 |  1  s.s    258 | Comment     | 11 |         |    0 | 00/81CB               | * MUSIC
+  269 |  1  s.s    259 | Comment     | 11 |         |    0 | 00/81CB               | * notes
+  270 |  1  s.s    260 | Data        | 11 |         |    1 | 00/81CB : FB          | note01      hex     FB             
+  271 |  1  s.s    261 | Data        | 11 |         |    1 | 00/81CC : ED          | note02      hex     ED             
+  272 |  1  s.s    262 | Data        | 11 |         |    1 | 00/81CD : DF          | note03      hex     DF             
+  273 |  1  s.s    263 | Data        | 11 |         |    1 | 00/81CE : D3          | note04      hex     D3             
+  274 |  1  s.s    264 | Data        | 11 |         |    1 | 00/81CF : C7          | note05      hex     C7             
+  275 |  1  s.s    265 | Data        | 11 |         |    1 | 00/81D0 : BB          | note06      hex     BB             
+  276 |  1  s.s    266 | Data        | 11 |         |    1 | 00/81D1 : B1          | note07      hex     B1             
+  277 |  1  s.s    267 | Data        | 11 |         |    1 | 00/81D2 : A7          | note08      hex     A7             
+  278 |  1  s.s    268 | Data        | 11 |         |    1 | 00/81D3 : 9D          | note09      hex     9D             
+  279 |  1  s.s    269 | Data        | 11 |         |    1 | 00/81D4 : 94          | note10      hex     94             
+  280 |  1  s.s    270 | Data        | 11 |         |    1 | 00/81D5 : 8C          | note11      hex     8C             
+  281 |  1  s.s    271 | Data        | 11 |         |    1 | 00/81D6 : 84          | note12      hex     84             
+  282 |  1  s.s    272 | Data        | 11 |         |    1 | 00/81D7 : 7C          | note13      hex     7C             
+  283 |  1  s.s    273 | Data        | 11 |         |    1 | 00/81D8 : 75          | note14      hex     75             
+  284 |  1  s.s    274 | Data        | 11 |         |    1 | 00/81D9 : 6F          | note15      hex     6F             
+  285 |  1  s.s    275 | Data        | 11 |         |    1 | 00/81DA : 68          | note16      hex     68             
+  286 |  1  s.s    276 | Data        | 11 |         |    1 | 00/81DB : 62          | note17      hex     62             
+  287 |  1  s.s    277 | Data        | 11 |         |    1 | 00/81DC : 5D          | note18      hex     5D             
+  288 |  1  s.s    278 | Data        | 11 |         |    1 | 00/81DD : 57          | note19      hex     57             
+  289 |  1  s.s    279 | Data        | 11 |         |    1 | 00/81DE : 52          | note20      hex     52             
+  290 |  1  s.s    280 | Data        | 11 |         |    1 | 00/81DF : 4E          | note21      hex     4E             
+  291 |  1  s.s    281 | Data        | 11 |         |    1 | 00/81E0 : 49          | note22      hex     49             
+  292 |  1  s.s    282 | Data        | 11 |         |    1 | 00/81E1 : 45          | note23      hex     45             
+  293 |  1  s.s    283 | Data        | 11 |         |    1 | 00/81E2 : 41          | note24      hex     41             
+  294 |  1  s.s    284 | Data        | 11 |         |    1 | 00/81E3 : 3D          | note25      hex     3D             
+  295 |  1  s.s    285 | Data        | 11 |         |    1 | 00/81E4 : 3A          | note26      hex     3A             
+  296 |  1  s.s    286 | Data        | 11 |         |    1 | 00/81E5 : 36          | note27      hex     36             
+  297 |  1  s.s    287 | Data        | 11 |         |    1 | 00/81E6 : 33          | note28      hex     33             
+  298 |  1  s.s    288 | Data        | 11 |         |    1 | 00/81E7 : 30          | note29      hex     30             
+  299 |  1  s.s    289 | Data        | 11 |         |    1 | 00/81E8 : 2D          | note30      hex     2D             
+  300 |  1  s.s    290 | Data        | 11 |         |    1 | 00/81E9 : 2B          | note31      hex     2B             
+  301 |  1  s.s    291 | Data        | 11 |         |    1 | 00/81EA : 28          | note32      hex     28             
+  302 |  1  s.s    292 | Data        | 11 |         |    1 | 00/81EB : 26          | note33      hex     26             
+  303 |  1  s.s    293 | Comment     | 11 |         |    0 | 00/81EC               | *
+  304 |  1  s.s    294 | Comment     | 11 |         |    0 | 00/81EC               | * durations
+  305 |  1  s.s    295 | Data        | 11 |         |    2 | 00/81EC : 01 37       | d1          hex     0137           
+  306 |  1  s.s    296 | Data        | 11 |         |    2 | 00/81EE : 01 49       | d2          hex     0149           
+  307 |  1  s.s    297 | Data        | 11 |         |    2 | 00/81F0 : 01 5D       | d3          hex     015D           
+  308 |  1  s.s    298 | Data        | 11 |         |    2 | 00/81F2 : 01 71       | d4          hex     0171           
+  309 |  1  s.s    299 | Data        | 11 |         |    2 | 00/81F4 : 01 88       | d5          hex     0188           
+  310 |  1  s.s    300 | Data        | 11 |         |    2 | 00/81F6 : 01 9F       | d6          hex     019F           
+  311 |  1  s.s    301 | Data        | 11 |         |    2 | 00/81F8 : 01 B8       | d7          hex     01B8           
+  312 |  1  s.s    302 | Data        | 11 |         |    2 | 00/81FA : 01 D2       | d8          hex     01D2           
+  313 |  1  s.s    303 | Data        | 11 |         |    2 | 00/81FC : 01 ED       | d9          hex     01ED           
+  314 |  1  s.s    304 | Data        | 11 |         |    2 | 00/81FE : 02 0B       | d10         hex     020B           
+  315 |  1  s.s    305 | Data        | 11 |         |    2 | 00/8200 : 02 2A       | d11         hex     022A           
+  316 |  1  s.s    306 | Data        | 11 |         |    2 | 00/8202 : 02 4B       | d12         hex     024B           
+  317 |  1  s.s    307 | Data        | 11 |         |    2 | 00/8204 : 02 6E       | d13         hex     026E           
+  318 |  1  s.s    308 | Data        | 11 |         |    2 | 00/8206 : 02 93       | d14         hex     0293           
+  319 |  1  s.s    309 | Data        | 11 |         |    2 | 00/8208 : 02 BA       | d15         hex     02BA           
+  320 |  1  s.s    310 | Data        | 11 |         |    2 | 00/820A : 02 E3       | d16         hex     02E3           
+  321 |  1  s.s    311 | Data        | 11 |         |    2 | 00/820C : 03 10       | d17         hex     0310           
+  322 |  1  s.s    312 | Data        | 11 |         |    2 | 00/820E : 03 3E       | d18         hex     033E           
+  323 |  1  s.s    313 | Data        | 11 |         |    2 | 00/8210 : 03 70       | d19         hex     0370           
+  324 |  1  s.s    314 | Data        | 11 |         |    2 | 00/8212 : 03 A4       | d20         hex     03A4           
+  325 |  1  s.s    315 | Data        | 11 |         |    2 | 00/8214 : 03 DB       | d21         hex     03DB           
+  326 |  1  s.s    316 | Data        | 11 |         |    2 | 00/8216 : 04 16       | d22         hex     0416           
+  327 |  1  s.s    317 | Data        | 11 |         |    2 | 00/8218 : 04 54       | d23         hex     0454           
+  328 |  1  s.s    318 | Data        | 11 |         |    2 | 00/821A : 04 96       | d24         hex     0496           
+  329 |  1  s.s    319 | Data        | 11 |         |    2 | 00/821C : 04 DC       | d25         hex     04DC           
+  330 |  1  s.s    320 | Data        | 11 |         |    2 | 00/821E : 05 26       | d26         hex     0526           
+  331 |  1  s.s    321 | Data        | 11 |         |    2 | 00/8220 : 05 74       | d27         hex     0574           
+  332 |  1  s.s    322 | Data        | 11 |         |    2 | 00/8222 : 05 C7       | d28         hex     05C7           
+  333 |  1  s.s    323 | Data        | 11 |         |    2 | 00/8224 : 06 20       | d29         hex     0620           
+  334 |  1  s.s    324 | Data        | 11 |         |    2 | 00/8226 : 06 7D       | d30         hex     067D           
+  335 |  1  s.s    325 | Data        | 11 |         |    2 | 00/8228 : 06 E0       | d31         hex     06E0           
+  336 |  1  s.s    326 | Data        | 11 |         |    2 | 00/822A : 07 48       | d32         hex     0748           
+  337 |  1  s.s    327 | Data        | 11 |         |    2 | 00/822C : 07 B7       | d33         hex     07B7           
+  338 |  1  s.s    328 | Empty       | 11 |         |    0 | 00/822E               |                                    
+  339 |  1  s.s    329 | Data        | 11 |         |    1 | 00/822E : 00          | pitch       hex     00             
+  340 |  1  s.s    330 | Data        | 11 |         |    1 | 00/822F : 00          | lengthlo    hex     00             
+  341 |  1  s.s    331 | Data        | 11 |         |    1 | 00/8230 : 00          | lengthhi    hex     00             
+  342 |  1  s.s    332 | Data        | 11 |         |    1 | 00/8231 : 00          | tempo       hex     00             
+  343 |  1  s.s    333 | Comment     | 11 |         |    0 | 00/8232               | *
+  344 |  1  s.s    334 | Comment     | 11 |         |    0 | 00/8232               | *
+  345 |  1  s.s    335 | Comment     | 11 |         |    0 | 00/8232               | * GRAPHICS
+  346 |  1  s.s    336 | Comment     | 11 |         |    0 | 00/8232               | *
+  347 |  1  s.s    337 | Data        | 11 |         |    1 | 00/8232 : 00          | left        hex     00             
+  348 |  1  s.s    338 | Data        | 11 |         |    1 | 00/8233 : 00          | right       hex     00             
+  349 |  1  s.s    339 | Data        | 11 |         |    1 | 00/8234 : 00          | top         hex     00             
+  350 |  1  s.s    340 | Data        | 11 |         |    1 | 00/8235 : 00          | bottom      hex     00             
+  351 |  1  s.s    341 | Comment     | 11 |         |    0 | 00/8236               | *   
+  352 |  1  s.s    342 | Data        | 11 |         |    1 | 00/8236 : 0B          | nblig2      hex     0b             ; hit a key...
+  353 |  1  s.s    343 | Data        | 11 |         |    1 | 00/8237 : 09          | nbcol2      hex     09             
+  354 |  1  s.s    344 | Data        | 11 |         |    8 | 00/8238 : 00 00 00 00 | hitk        hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-   97 |  1  s.s     97 | Data        | 11 |         |    8 | 00/8076 : 00 00 00 00 |             hex   0000000000000000
+  355 |  1  s.s    345 | Data        | 11 |         |    8 | 00/8240 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-   98 |  1  s.s     98 | Data        | 11 |         |    8 | 00/807E : 00 00 00 00 |             hex   0000000000000000
+  356 |  1  s.s    346 | Data        | 11 |         |    8 | 00/8248 : 00 00 06 0C |             hex     0000060c03000060
+      |                |             |    |         |      |           03 00 00 60 |
+  357 |  1  s.s    347 | Data        | 11 |         |    8 | 00/8250 : 00 00 00 06 |             hex     0000000600030000
+      |                |             |    |         |      |           00 03 00 00 |
+  358 |  1  s.s    348 | Data        | 11 |         |    8 | 00/8258 : 60 00 00 00 |             hex     600000003e4c0f40
+      |                |             |    |         |      |           3E 4C 0F 40 |
+  359 |  1  s.s    349 | Data        | 11 |         |    8 | 00/8260 : 07 60 0C 0F |             hex     07600c0f33660c03
+      |                |             |    |         |      |           33 66 0C 03 |
+  360 |  1  s.s    350 | Data        | 11 |         |    8 | 00/8268 : 00 0C 60 46 |             hex     000c60461933660c
+      |                |             |    |         |      |           19 33 66 0C |
+  361 |  1  s.s    351 | Data        | 11 |         |    8 | 00/8270 : 03 40 0F 60 |             hex     03400f60471f3366
+      |                |             |    |         |      |           47 1F 33 66 |
+  362 |  1  s.s    352 | Data        | 11 |         |    8 | 00/8278 : 0C 03 60 0C |             hex     0c03600c604c013e
+      |                |             |    |         |      |           60 4C 01 3E |
+  363 |  1  s.s    353 | Data        | 11 |         |    8 | 00/8280 : 66 0C 0E 40 |             hex     660c0e400f600c0f
+      |                |             |    |         |      |           0F 60 0C 0F |
+  364 |  1  s.s    354 | Data        | 11 |         |    8 | 00/8288 : 30 00 00 00 |             hex     3000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-   99 |  1  s.s     99 | Data        | 11 |         |    8 | 00/8086 : 00 00 00 00 |             hex   0000000000007001
+  365 |  1  s.s    355 | Data        | 11 |         |    8 | 00/8290 : 00 1E 00 00 |             hex     001e000000000000
+      |                |             |    |         |      |           00 00 00 00 |
+  366 |  1  s.s    356 | Data        | 11 |         |    3 | 00/8298 : 00 00 00    |             hex     000000         
+  367 |  1  s.s    357 | Comment     | 11 |         |    0 | 00/829B               | *
+  368 |  1  s.s    358 | Data        | 11 |         |    1 | 00/829B : 1C          | nblig       hex     1c             ; tribute...
+  369 |  1  s.s    359 | Data        | 11 |         |    1 | 00/829C : 1E          | nbcol       hex     1e             
+  370 |  1  s.s    360 | Data        | 11 |         |    8 | 00/829D : 00 00 00 00 | cut         hex     0000000000000000
+      |                |             |    |         |      |           00 00 00 00 |
+  371 |  1  s.s    361 | Data        | 11 |         |    8 | 00/82A5 : 00 00 00 00 |             hex     0000000000000000
+      |                |             |    |         |      |           00 00 00 00 |
+  372 |  1  s.s    362 | Data        | 11 |         |    8 | 00/82AD : 00 00 00 00 |             hex     0000000000000000
+      |                |             |    |         |      |           00 00 00 00 |
+  373 |  1  s.s    363 | Data        | 11 |         |    8 | 00/82B5 : 00 00 00 00 |             hex     0000000000007001
       |                |             |    |         |      |           00 00 70 01 |
-  100 |  1  s.s    100 | Data        | 11 |         |    8 | 00/808E : 30 00 18 03 |             hex   3000180300180000
+  374 |  1  s.s    364 | Data        | 11 |         |    8 | 00/82BD : 30 00 18 03 |             hex     3000180300180000
       |                |             |    |         |      |           00 18 00 00 |
-  101 |  1  s.s    101 | Data        | 11 |         |    8 | 00/8096 : 18 00 00 00 |             hex   1800000078330000
+  375 |  1  s.s    365 | Data        | 11 |         |    8 | 00/82C5 : 18 00 00 00 |             hex     1800000078330000
       |                |             |    |         |      |           78 33 00 00 |
-  102 |  1  s.s    102 | Data        | 11 |         |    8 | 00/809E : 60 4C 19 03 |             hex   604c190306306000
+  376 |  1  s.s    366 | Data        | 11 |         |    8 | 00/82CD : 60 4C 19 03 |             hex     604c190306306000
       |                |             |    |         |      |           06 30 60 00 |
-  103 |  1  s.s    103 | Data        | 11 |         |    8 | 00/80A6 : 00 00 00 00 |             hex   0000000018033000
+  377 |  1  s.s    367 | Data        | 11 |         |    8 | 00/82D5 : 00 00 00 00 |             hex     0000000018033000
       |                |             |    |         |      |           18 03 30 00 |
-  104 |  1  s.s    104 | Data        | 11 |         |    8 | 00/80AE : 00 03 00 18 |             hex   0003001800001800
+  378 |  1  s.s    368 | Data        | 11 |         |    8 | 00/82DD : 00 03 00 18 |             hex     0003001800001800
       |                |             |    |         |      |           00 00 18 00 |
-  105 |  1  s.s    105 | Data        | 11 |         |    8 | 00/80B6 : 00 4C 61 30 |             hex   004c61300000604c
+  379 |  1  s.s    369 | Data        | 11 |         |    8 | 00/82E5 : 00 4C 61 30 |             hex     004c61300000604c
       |                |             |    |         |      |           00 00 60 4C |
-  106 |  1  s.s    106 | Data        | 11 |         |    8 | 00/80BE : 01 03 06 70 |             hex   0103067070000030
+  380 |  1  s.s    370 | Data        | 11 |         |    8 | 00/82ED : 01 03 06 70 |             hex     0103067070000030
       |                |             |    |         |      |           70 00 00 30 |
-  107 |  1  s.s    107 | Data        | 11 |         |    8 | 00/80C6 : 06 00 18 03 |             hex   060018037879191f
+  381 |  1  s.s    371 | Data        | 11 |         |    8 | 00/82F5 : 06 00 18 03 |             hex     060018037879191f
       |                |             |    |         |      |           78 79 19 1F |
-  108 |  1  s.s    108 | Data        | 11 |         |    8 | 00/80CE : 66 7C 78 00 |             hex   667c78007c78004c
+  382 |  1  s.s    372 | Data        | 11 |         |    8 | 00/82FD : 66 7C 78 00 |             hex     667c78007c78004c
       |                |             |    |         |      |           7C 78 00 4C |
-  109 |  1  s.s    109 | Data        | 11 |         |    8 | 00/80D6 : 61 70 43 07 |             hex   61704307604c1963
+  383 |  1  s.s    373 | Data        | 11 |         |    8 | 00/8305 : 61 70 43 07 |             hex     61704307604c1963
       |                |             |    |         |      |           60 4C 19 63 |
-  110 |  1  s.s    110 | Data        | 11 |         |    8 | 00/80DE : 07 70 79 78 |             hex   0770797878310600
+  384 |  1  s.s    374 | Data        | 11 |         |    8 | 00/830D : 07 70 79 78 |             hex     0770797878310600
       |                |             |    |         |      |           78 31 06 00 |
-  111 |  1  s.s    111 | Data        | 11 |         |    8 | 00/80E6 : 18 03 30 38 |             hex   1803303818336618
+  385 |  1  s.s    375 | Data        | 11 |         |    8 | 00/8315 : 18 03 30 38 |             hex     1803303818336618
       |                |             |    |         |      |           18 33 66 18 |
-  112 |  1  s.s    112 | Data        | 11 |         |    8 | 00/80EE : 4C 01 18 4C |             hex   4c01184c01006030
+  386 |  1  s.s    376 | Data        | 11 |         |    8 | 00/831D : 4C 01 18 4C |             hex     4c01184c01006030
       |                |             |    |         |      |           01 00 60 30 |
-  113 |  1  s.s    113 | Data        | 11 |         |    8 | 00/80F6 : 66 0C 60 4C |             hex   660c604c19330630
+  387 |  1  s.s    377 | Data        | 11 |         |    8 | 00/8325 : 66 0C 60 4C |             hex     660c604c19330630
       |                |             |    |         |      |           19 33 06 30 |
-  114 |  1  s.s    114 | Data        | 11 |         |    8 | 00/80FE : 6F 40 19 03 |             hex   6f40190300007803
+  388 |  1  s.s    378 | Data        | 11 |         |    8 | 00/832D : 6F 40 19 03 |             hex     6f40190300007803
       |                |             |    |         |      |           00 00 78 03 |
-  115 |  1  s.s    115 | Data        | 11 |         |    8 | 00/8106 : 30 18 18 33 |             hex   3018183366187c01
+  389 |  1  s.s    379 | Data        | 11 |         |    8 | 00/8335 : 30 18 18 33 |             hex     3018183366187c01
       |                |             |    |         |      |           66 18 7C 01 |
-  116 |  1  s.s    116 | Data        | 11 |         |    8 | 00/810E : 18 4C 01 00 |             hex   184c01006030660f
+  390 |  1  s.s    380 | Data        | 11 |         |    8 | 00/833D : 18 4C 01 00 |             hex     184c01006030660f
       |                |             |    |         |      |           60 30 66 0F |
-  117 |  1  s.s    117 | Data        | 11 |         |    8 | 00/8116 : 60 4C 19 33 |             hex   604c193306306678
+  391 |  1  s.s    381 | Data        | 11 |         |    8 | 00/8345 : 60 4C 19 33 |             hex     604c193306306678
       |                |             |    |         |      |           06 30 66 78 |
-  118 |  1  s.s    118 | Data        | 11 |         |    8 | 00/811E : 19 03 00 00 |             hex   1903000018033018
+  392 |  1  s.s    382 | Data        | 11 |         |    8 | 00/834D : 19 03 00 00 |             hex     1903000018033018
       |                |             |    |         |      |           18 03 30 18 |
-  119 |  1  s.s    119 | Data        | 11 |         |    8 | 00/8126 : 18 33 66 18 |             hex   183366180c00184c
+  393 |  1  s.s    383 | Data        | 11 |         |    8 | 00/8355 : 18 33 66 18 |             hex     183366180c00184c
       |                |             |    |         |      |           0C 00 18 4C |
-  120 |  1  s.s    120 | Data        | 11 |         |    8 | 00/812E : 01 00 60 30 |             hex   010060306600407f
+  394 |  1  s.s    384 | Data        | 11 |         |    8 | 00/835D : 01 00 60 30 |             hex     010060306600407f
       |                |             |    |         |      |           66 00 40 7F |
-  121 |  1  s.s    121 | Data        | 11 |         |    8 | 00/8136 : 18 33 06 30 |             hex   18330630604c1903
+  395 |  1  s.s    385 | Data        | 11 |         |    8 | 00/8365 : 18 33 06 30 |             hex     18330630604c1903
       |                |             |    |         |      |           60 4C 19 03 |
-  122 |  1  s.s    122 | Data        | 11 |         |    8 | 00/813E : 00 00 18 03 |             hex   000018036019181f
+  396 |  1  s.s    386 | Data        | 11 |         |    8 | 00/836D : 00 00 18 03 |             hex     000018036019181f
       |                |             |    |         |      |           60 19 18 1F |
-  123 |  1  s.s    123 | Data        | 11 |         |    8 | 00/8146 : 7C 70 78 00 |             hex   7c70780070780000
+  397 |  1  s.s    387 | Data        | 11 |         |    8 | 00/8375 : 7C 70 78 00 |             hex     7c70780070780000
       |                |             |    |         |      |           70 78 00 00 |
-  124 |  1  s.s    124 | Data        | 11 |         |    8 | 00/814E : 60 30 46 07 |             hex   6030460700331863
+  398 |  1  s.s    388 | Data        | 11 |         |    8 | 00/837D : 60 30 46 07 |             hex     6030460700331863
       |                |             |    |         |      |           00 33 18 63 |
-  125 |  1  s.s    125 | Data        | 11 |         |    8 | 00/8156 : 07 30 60 78 |             hex   0730607819030000
+  399 |  1  s.s    389 | Data        | 11 |         |    8 | 00/8385 : 07 30 60 78 |             hex     0730607819030000
       |                |             |    |         |      |           19 03 00 00 |
-  126 |  1  s.s    126 | Data        | 11 |         |    8 | 00/815E : 00 00 00 00 |             hex   0000000000000000
+  400 |  1  s.s    390 | Data        | 11 |         |    8 | 00/838D : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  127 |  1  s.s    127 | Data        | 11 |         |    8 | 00/8166 : 00 00 00 00 |             hex   0000000000000000
+  401 |  1  s.s    391 | Data        | 11 |         |    8 | 00/8395 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  128 |  1  s.s    128 | Data        | 11 |         |    8 | 00/816E : 00 00 00 00 |             hex   0000000000000000
+  402 |  1  s.s    392 | Data        | 11 |         |    8 | 00/839D : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  129 |  1  s.s    129 | Data        | 11 |         |    8 | 00/8176 : 00 00 00 00 |             hex   0000000000000000
+  403 |  1  s.s    393 | Data        | 11 |         |    8 | 00/83A5 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  130 |  1  s.s    130 | Data        | 11 |         |    8 | 00/817E : 00 00 00 00 |             hex   0000000000000000
+  404 |  1  s.s    394 | Data        | 11 |         |    8 | 00/83AD : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  131 |  1  s.s    131 | Data        | 11 |         |    8 | 00/8186 : 00 00 00 00 |             hex   0000000000000000
+  405 |  1  s.s    395 | Data        | 11 |         |    8 | 00/83B5 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  132 |  1  s.s    132 | Data        | 11 |         |    8 | 00/818E : 00 00 00 00 |             hex   0000000000000000
+  406 |  1  s.s    396 | Data        | 11 |         |    8 | 00/83BD : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  133 |  1  s.s    133 | Data        | 11 |         |    8 | 00/8196 : 00 00 00 00 |             hex   0000000060010000
+  407 |  1  s.s    397 | Data        | 11 |         |    8 | 00/83C5 : 00 00 00 00 |             hex     0000000060010000
       |                |             |    |         |      |           60 01 00 00 |
-  134 |  1  s.s    134 | Data        | 11 |         |    8 | 00/819E : 00 00 3C 40 |             hex   00003c400f600300
+  408 |  1  s.s    398 | Data        | 11 |         |    8 | 00/83CD : 00 00 3C 40 |             hex     00003c400f600300
       |                |             |    |         |      |           0F 60 03 00 |
-  135 |  1  s.s    135 | Data        | 11 |         |    8 | 00/81A6 : 38 00 00 00 |             hex   3800000000000000
+  409 |  1  s.s    399 | Data        | 11 |         |    8 | 00/83D5 : 38 00 00 00 |             hex     3800000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  136 |  1  s.s    136 | Data        | 11 |         |    8 | 00/81AE : 00 00 00 00 |             hex   0000000000000000
+  410 |  1  s.s    400 | Data        | 11 |         |    8 | 00/83DD : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  137 |  1  s.s    137 | Data        | 11 |         |    8 | 00/81B6 : 00 00 30 00 |             hex   0000300000000000
+  411 |  1  s.s    401 | Data        | 11 |         |    8 | 00/83E5 : 00 00 30 00 |             hex     0000300000000000
       |                |             |    |         |      |           00 00 00 00 |
-  138 |  1  s.s    138 | Data        | 11 |         |    8 | 00/81BE : 66 40 19 30 |             hex   6640193006000c00
+  412 |  1  s.s    402 | Data        | 11 |         |    8 | 00/83ED : 66 40 19 30 |             hex     6640193006000c00
       |                |             |    |         |      |           06 00 0C 00 |
-  139 |  1  s.s    139 | Data        | 11 |         |    8 | 00/81C6 : 00 00 00 00 |             hex   0000000000000000
+  413 |  1  s.s    403 | Data        | 11 |         |    8 | 00/83F5 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  140 |  1  s.s    140 | Data        | 11 |         |    8 | 00/81CE : 00 00 00 00 |             hex   0000000000000000
+  414 |  1  s.s    404 | Data        | 11 |         |    8 | 00/83FD : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  141 |  1  s.s    141 | Data        | 11 |         |    8 | 00/81D6 : 78 79 71 71 |             hex   787971713f006640
+  415 |  1  s.s    405 | Data        | 11 |         |    8 | 00/8405 : 78 79 71 71 |             hex     787971713f006640
       |                |             |    |         |      |           3F 00 66 40 |
-  142 |  1  s.s    142 | Data        | 11 |         |    8 | 00/81DE : 19 30 00 00 |             hex   193000003e3c7c00
+  416 |  1  s.s    406 | Data        | 11 |         |    8 | 00/840D : 19 30 00 00 |             hex     193000003e3c7c00
       |                |             |    |         |      |           3E 3C 7C 00 |
-  143 |  1  s.s    143 | Data        | 11 |         |    8 | 00/81E6 : 06 00 00 00 |             hex   0600000000000000
+  417 |  1  s.s    407 | Data        | 11 |         |    8 | 00/8415 : 06 00 00 00 |             hex     0600000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  144 |  1  s.s    144 | Data        | 11 |         |    8 | 00/81EE : 00 00 00 00 |             hex   0000000000003038
+  418 |  1  s.s    408 | Data        | 11 |         |    8 | 00/841D : 00 00 00 00 |             hex     0000000000003038
       |                |             |    |         |      |           00 00 30 38 |
-  145 |  1  s.s    145 | Data        | 11 |         |    8 | 00/81F6 : 18 33 66 00 |             hex   1833660066400f30
+  419 |  1  s.s    409 | Data        | 11 |         |    8 | 00/8425 : 18 33 66 00 |             hex     1833660066400f30
       |                |             |    |         |      |           66 40 0F 30 |
-  146 |  1  s.s    146 | Data        | 11 |         |    8 | 00/81FE : 00 00 0C 66 |             hex   00000c661c000600
+  420 |  1  s.s    410 | Data        | 11 |         |    8 | 00/842D : 00 00 0C 66 |             hex     00000c661c000600
       |                |             |    |         |      |           1C 00 06 00 |
-  147 |  1  s.s    147 | Data        | 11 |         |    8 | 00/8206 : 00 00 00 00 |             hex   0000000000000000
+  421 |  1  s.s    411 | Data        | 11 |         |    8 | 00/8435 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  148 |  1  s.s    148 | Data        | 11 |         |    8 | 00/820E : 00 00 00 00 |             hex   0000000030181833
+  422 |  1  s.s    412 | Data        | 11 |         |    8 | 00/843D : 00 00 00 00 |             hex     0000000030181833
       |                |             |    |         |      |           30 18 18 33 |
-  149 |  1  s.s    149 | Data        | 11 |         |    8 | 00/8216 : 66 00 7E 40 |             hex   66007e4019300000
+  423 |  1  s.s    413 | Data        | 11 |         |    8 | 00/8445 : 66 00 7E 40 |             hex     66007e4019300000
       |                |             |    |         |      |           19 30 00 00 |
-  150 |  1  s.s    150 | Data        | 11 |         |    8 | 00/821E : 0C 66 0C 00 |             hex   0c660c0000000000
+  424 |  1  s.s    414 | Data        | 11 |         |    8 | 00/844D : 0C 66 0C 00 |             hex     0c660c0000000000
       |                |             |    |         |      |           00 00 00 00 |
-  151 |  1  s.s    151 | Data        | 11 |         |    8 | 00/8226 : 00 00 00 00 |             hex   0000000000000000
+  425 |  1  s.s    415 | Data        | 11 |         |    8 | 00/8455 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  152 |  1  s.s    152 | Data        | 11 |         |    8 | 00/822E : 00 00 30 18 |             hex   0000301818336600
+  426 |  1  s.s    416 | Data        | 11 |         |    8 | 00/845D : 00 00 30 18 |             hex     0000301818336600
       |                |             |    |         |      |           18 33 66 00 |
-  153 |  1  s.s    153 | Data        | 11 |         |    8 | 00/8236 : 66 4C 19 33 |             hex   664c193366000c66
+  427 |  1  s.s    417 | Data        | 11 |         |    8 | 00/8465 : 66 4C 19 33 |             hex     664c193366000c66
       |                |             |    |         |      |           66 00 0C 66 |
-  154 |  1  s.s    154 | Data        | 11 |         |    8 | 00/823E : 0C 00 06 00 |             hex   0c00060000000000
+  428 |  1  s.s    418 | Data        | 11 |         |    8 | 00/846D : 0C 00 06 00 |             hex     0c00060000000000
       |                |             |    |         |      |           00 00 00 00 |
-  155 |  1  s.s    155 | Data        | 11 |         |    8 | 00/8246 : 00 00 00 00 |             hex   0000000000000000
+  429 |  1  s.s    419 | Data        | 11 |         |    8 | 00/8475 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  156 |  1  s.s    156 | Data        | 11 |         |    8 | 00/824E : 30 18 70 31 |             hex   301870316600664c
+  430 |  1  s.s    420 | Data        | 11 |         |    8 | 00/847D : 30 18 70 31 |             hex     301870316600664c
       |                |             |    |         |      |           66 00 66 4C |
-  157 |  1  s.s    157 | Data        | 11 |         |    8 | 00/8256 : 0F 63 63 00 |             hex   0f6363000c3c0c00
+  431 |  1  s.s    421 | Data        | 11 |         |    8 | 00/8485 : 0F 63 63 00 |             hex     0f6363000c3c0c00
       |                |             |    |         |      |           0C 3C 0C 00 |
-  158 |  1  s.s    158 | Data        | 11 |         |    8 | 00/825E : 06 00 00 00 |             hex   0600000000000000
+  432 |  1  s.s    422 | Data        | 11 |         |    8 | 00/848D : 06 00 00 00 |             hex     0600000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  159 |  1  s.s    159 | Data        | 11 |         |    8 | 00/8266 : 00 00 00 00 |             hex   0000000000000000
+  433 |  1  s.s    423 | Data        | 11 |         |    8 | 00/8495 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  160 |  1  s.s    160 | Data        | 11 |         |    8 | 00/826E : 00 00 00 00 |             hex   0000000000000000
+  434 |  1  s.s    424 | Data        | 11 |         |    8 | 00/849D : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  161 |  1  s.s    161 | Data        | 11 |         |    8 | 00/8276 : 00 00 00 00 |             hex   0000000000000000
+  435 |  1  s.s    425 | Data        | 11 |         |    8 | 00/84A5 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  162 |  1  s.s    162 | Data        | 11 |         |    8 | 00/827E : 00 00 00 00 |             hex   0000000000000000
+  436 |  1  s.s    426 | Data        | 11 |         |    8 | 00/84AD : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  163 |  1  s.s    163 | Data        | 11 |         |    8 | 00/8286 : 00 00 00 00 |             hex   0000000000000000
+  437 |  1  s.s    427 | Data        | 11 |         |    8 | 00/84B5 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  164 |  1  s.s    164 | Data        | 11 |         |    8 | 00/828E : 00 00 03 00 |             hex   0000030000000000
+  438 |  1  s.s    428 | Data        | 11 |         |    8 | 00/84BD : 00 00 03 00 |             hex     0000030000000000
       |                |             |    |         |      |           00 00 00 00 |
-  165 |  1  s.s    165 | Data        | 11 |         |    8 | 00/8296 : 00 00 00 00 |             hex   0000000000000000
+  439 |  1  s.s    429 | Data        | 11 |         |    8 | 00/84C5 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  166 |  1  s.s    166 | Data        | 11 |         |    8 | 00/829E : 00 00 00 00 |             hex   0000000000000000
+  440 |  1  s.s    430 | Data        | 11 |         |    8 | 00/84CD : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  167 |  1  s.s    167 | Data        | 11 |         |    8 | 00/82A6 : 00 00 00 30 |             hex   0000003000007063
+  441 |  1  s.s    431 | Data        | 11 |         |    8 | 00/84D5 : 00 00 00 30 |             hex     0000003000007063
       |                |             |    |         |      |           00 00 70 63 |
-  168 |  1  s.s    168 | Data        | 11 |         |    8 | 00/82AE : 0C 03 00 00 |             hex   0c0300001800003e
+  442 |  1  s.s    432 | Data        | 11 |         |    8 | 00/84DD : 0C 03 00 00 |             hex     0c0300001800003e
       |                |             |    |         |      |           18 00 00 3E |
-  169 |  1  s.s    169 | Data        | 11 |         |    8 | 00/82B6 : 60 00 00 00 |             hex   6000000000180000
+  443 |  1  s.s    433 | Data        | 11 |         |    8 | 00/84E5 : 60 00 00 00 |             hex     6000000000180000
       |                |             |    |         |      |           00 18 00 00 |
-  170 |  1  s.s    170 | Data        | 11 |         |    8 | 00/82BE : 00 00 00 00 |             hex   0000000000006000
+  444 |  1  s.s    434 | Data        | 11 |         |    8 | 00/84ED : 00 00 00 00 |             hex     0000000000006000
       |                |             |    |         |      |           00 00 60 00 |
-  171 |  1  s.s    171 | Data        | 11 |         |    8 | 00/82C6 : 18 33 00 00 |             hex   1833000030060003
+  445 |  1  s.s    435 | Data        | 11 |         |    8 | 00/84F5 : 18 33 00 00 |             hex     1833000030060003
       |                |             |    |         |      |           30 06 00 03 |
-  172 |  1  s.s    172 | Data        | 11 |         |    8 | 00/82CE : 00 00 18 00 |             hex   0000180000633000
+  446 |  1  s.s    436 | Data        | 11 |         |    8 | 00/84FD : 00 00 18 00 |             hex     0000180000633000
       |                |             |    |         |      |           00 63 30 00 |
-  173 |  1  s.s    173 | Data        | 11 |         |    8 | 00/82D6 : 00 00 00 18 |             hex   0000001800004c01
+  447 |  1  s.s    437 | Data        | 11 |         |    8 | 00/8505 : 00 00 00 18 |             hex     0000001800004c01
       |                |             |    |         |      |           00 00 4C 01 |
-  174 |  1  s.s    174 | Data        | 11 |         |    8 | 00/82DE : 00 00 00 00 |             hex   0000000060001833
+  448 |  1  s.s    438 | Data        | 11 |         |    8 | 00/850D : 00 00 00 00 |             hex     0000000060001833
       |                |             |    |         |      |           60 00 18 33 |
-  175 |  1  s.s    175 | Data        | 11 |         |    8 | 00/82E6 : 60 03 30 46 |             hex   60033046470f0f00
+  449 |  1  s.s    439 | Data        | 11 |         |    8 | 00/8515 : 60 03 30 46 |             hex     60033046470f0f00
       |                |             |    |         |      |           47 0F 0F 00 |
-  176 |  1  s.s    176 | Data        | 11 |         |    8 | 00/82EE : 1F 33 00 03 |             hex   1f33000378186363
+  450 |  1  s.s    440 | Data        | 11 |         |    8 | 00/851D : 1F 33 00 03 |             hex     1f33000378186363
       |                |             |    |         |      |           78 18 63 63 |
-  177 |  1  s.s    177 | Data        | 11 |         |    8 | 00/82F6 : 0C 1F 1E 3E |             hex   0c1f1e3e4c017878
+  451 |  1  s.s    441 | Data        | 11 |         |    8 | 00/8525 : 0C 1F 1E 3E |             hex     0c1f1e3e4c017878
       |                |             |    |         |      |           4C 01 78 78 |
-  178 |  1  s.s    178 | Data        | 11 |         |    8 | 00/82FE : 71 61 63 0C |             hex   7161630c00300006
+  452 |  1  s.s    442 | Data        | 11 |         |    8 | 00/852D : 71 61 63 0C |             hex     7161630c00300006
       |                |             |    |         |      |           00 30 00 06 |
-  179 |  1  s.s    179 | Data        | 11 |         |    8 | 00/8306 : 70 63 0C 43 |             hex   70630c4319401933
+  453 |  1  s.s    443 | Data        | 11 |         |    8 | 00/8535 : 70 63 0C 43 |             hex     70630c4319401933
       |                |             |    |         |      |           19 40 19 33 |
-  180 |  1  s.s    180 | Data        | 11 |         |    8 | 00/830E : 00 73 4C 19 |             hex   00734c1903664c19
+  454 |  1  s.s    444 | Data        | 11 |         |    8 | 00/853D : 00 73 4C 19 |             hex     00734c1903664c19
       |                |             |    |         |      |           03 66 4C 19 |
-  181 |  1  s.s    181 | Data        | 11 |         |    8 | 00/8316 : 30 66 00 00 |             hex   306600004c390033
+  455 |  1  s.s    445 | Data        | 11 |         |    8 | 00/8545 : 30 66 00 00 |             hex     306600004c390033
       |                |             |    |         |      |           4C 39 00 33 |
-  182 |  1  s.s    182 | Data        | 11 |         |    8 | 00/831E : 66 06 00 30 |             hex   6606003060073066
+  456 |  1  s.s    446 | Data        | 11 |         |    8 | 00/854D : 66 06 00 30 |             hex     6606003060073066
       |                |             |    |         |      |           60 07 30 66 |
-  183 |  1  s.s    183 | Data        | 11 |         |    8 | 00/8326 : 0F 43 1F 40 |             hex   0f431f4019330063
+  457 |  1  s.s    447 | Data        | 11 |         |    8 | 00/8555 : 0F 43 1F 40 |             hex     0f431f4019330063
       |                |             |    |         |      |           19 33 00 63 |
-  184 |  1  s.s    184 | Data        | 11 |         |    8 | 00/832E : 7C 19 63 67 |             hex   7c1963674c193e66
+  458 |  1  s.s    448 | Data        | 11 |         |    8 | 00/855D : 7C 19 63 67 |             hex     7c1963674c193e66
       |                |             |    |         |      |           4C 19 3E 66 |
-  185 |  1  s.s    185 | Data        | 11 |         |    8 | 00/8336 : 00 00 0C 18 |             hex   00000c1870336007
+  459 |  1  s.s    449 | Data        | 11 |         |    8 | 00/8565 : 00 00 0C 18 |             hex     00000c1870336007
       |                |             |    |         |      |           70 33 60 07 |
-  186 |  1  s.s    186 | Data        | 11 |         |    8 | 00/833E : 00 30 30 06 |             hex   0030300630660043
+  460 |  1  s.s    450 | Data        | 11 |         |    8 | 00/856D : 00 30 30 06 |             hex     0030300630660043
       |                |             |    |         |      |           30 66 00 43 |
-  187 |  1  s.s    187 | Data        | 11 |         |    8 | 00/8346 : 01 40 19 33 |             hex   0140193300630c70
+  461 |  1  s.s    451 | Data        | 11 |         |    8 | 00/8575 : 01 40 19 33 |             hex     0140193300630c70
       |                |             |    |         |      |           00 63 0C 70 |
-  188 |  1  s.s    188 | Data        | 11 |         |    8 | 00/834E : 31 66 4C 19 |             hex   31664c1933660000
+  462 |  1  s.s    452 | Data        | 11 |         |    8 | 00/857D : 31 66 4C 19 |             hex     31664c1933660000
       |                |             |    |         |      |           33 66 00 00 |
-  189 |  1  s.s    189 | Data        | 11 |         |    8 | 00/8356 : 4C 19 18 33 |             hex   4c191833660c0070
+  463 |  1  s.s    453 | Data        | 11 |         |    8 | 00/8585 : 4C 19 18 33 |             hex     4c191833660c0070
       |                |             |    |         |      |           66 0C 00 70 |
-  190 |  1  s.s    190 | Data        | 11 |         |    8 | 00/835E : 63 07 70 43 |             hex   63077043070e0f00
+  464 |  1  s.s    454 | Data        | 11 |         |    8 | 00/858D : 63 07 70 43 |             hex     63077043070e0f00
       |                |             |    |         |      |           07 0E 0F 00 |
-  191 |  1  s.s    191 | Data        | 11 |         |    8 | 00/8366 : 1F 3E 00 3E |             hex   1f3e003e78606047
+  465 |  1  s.s    455 | Data        | 11 |         |    8 | 00/8595 : 1F 3E 00 3E |             hex     1f3e003e78606047
       |                |             |    |         |      |           78 60 60 47 |
-  192 |  1  s.s    192 | Data        | 11 |         |    8 | 00/836E : 0F 1F 3E 66 |             hex   0f1f3e6600007818
+  466 |  1  s.s    456 | Data        | 11 |         |    8 | 00/859D : 0F 1F 3E 66 |             hex     0f1f3e6600007818
       |                |             |    |         |      |           00 00 78 18 |
-  193 |  1  s.s    193 | Data        | 11 |         |    8 | 00/8376 : 70 63 63 0C |             hex   7063630c00000000
+  467 |  1  s.s    457 | Data        | 11 |         |    8 | 00/85A5 : 70 63 63 0C |             hex     7063630c00000000
       |                |             |    |         |      |           00 00 00 00 |
-  194 |  1  s.s    194 | Data        | 11 |         |    8 | 00/837E : 00 00 00 00 |             hex   0000000000000000
+  468 |  1  s.s    458 | Data        | 11 |         |    8 | 00/85AD : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  195 |  1  s.s    195 | Data        | 11 |         |    8 | 00/8386 : 00 00 00 00 |             hex   0000000000000000
+  469 |  1  s.s    459 | Data        | 11 |         |    8 | 00/85B5 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  196 |  1  s.s    196 | Data        | 11 |         |    8 | 00/838E : 00 00 00 00 |             hex   0000000000000000
+  470 |  1  s.s    460 | Data        | 11 |         |    8 | 00/85BD : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  197 |  1  s.s    197 | Data        | 11 |         |    8 | 00/8396 : 00 00 00 00 |             hex   0000000000000000
+  471 |  1  s.s    461 | Data        | 11 |         |    8 | 00/85C5 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  198 |  1  s.s    198 | Data        | 11 |         |    8 | 00/839E : 00 00 00 00 |             hex   0000000000000000
+  472 |  1  s.s    462 | Data        | 11 |         |    8 | 00/85CD : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  199 |  1  s.s    199 | Data        | 11 |         |    8 | 00/83A6 : 00 00 00 00 |             hex   0000000000000000
+  473 |  1  s.s    463 | Data        | 11 |         |    8 | 00/85D5 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  200 |  1  s.s    200 | Data        | 11 |         |    8 | 00/83AE : 00 00 00 00 |             hex   0000000000000000
+  474 |  1  s.s    464 | Data        | 11 |         |    8 | 00/85DD : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  201 |  1  s.s    201 | Empty       | 11 |         |    0 | 00/83B6               |                                  
-  202 |  1  s.s    202 | Comment     | 11 |         |    0 | 00/83B6               | *
-  203 |  1  s.s    203 | Data        | 11 |         |    8 | 00/83B6 : 20 24 28 2C | hi          hex   2024282C3034383C
+  475 |  1  s.s    465 | Comment     | 11 |         |    0 | 00/85E5               | *
+  476 |  1  s.s    466 | Data        | 11 |         |    8 | 00/85E5 : 20 24 28 2C | hi          hex     2024282C3034383C
       |                |             |    |         |      |           30 34 38 3C |
-  204 |  1  s.s    204 | Data        | 11 |         |    8 | 00/83BE : 20 24 28 2C |             hex   2024282C3034383C
+  477 |  1  s.s    467 | Data        | 11 |         |    8 | 00/85ED : 20 24 28 2C |             hex     2024282C3034383C
       |                |             |    |         |      |           30 34 38 3C |
-  205 |  1  s.s    205 | Data        | 11 |         |    8 | 00/83C6 : 21 25 29 2D |             hex   2125292D3135393D
+  478 |  1  s.s    468 | Data        | 11 |         |    8 | 00/85F5 : 21 25 29 2D |             hex     2125292D3135393D
       |                |             |    |         |      |           31 35 39 3D |
-  206 |  1  s.s    206 | Data        | 11 |         |    8 | 00/83CE : 21 25 29 2D |             hex   2125292D3135393D
+  479 |  1  s.s    469 | Data        | 11 |         |    8 | 00/85FD : 21 25 29 2D |             hex     2125292D3135393D
       |                |             |    |         |      |           31 35 39 3D |
-  207 |  1  s.s    207 | Data        | 11 |         |    8 | 00/83D6 : 22 26 2A 2E |             hex   22262A2E32363A3E
+  480 |  1  s.s    470 | Data        | 11 |         |    8 | 00/8605 : 22 26 2A 2E |             hex     22262A2E32363A3E
       |                |             |    |         |      |           32 36 3A 3E |
-  208 |  1  s.s    208 | Data        | 11 |         |    8 | 00/83DE : 22 26 2A 2E |             hex   22262A2E32363A3E
+  481 |  1  s.s    471 | Data        | 11 |         |    8 | 00/860D : 22 26 2A 2E |             hex     22262A2E32363A3E
       |                |             |    |         |      |           32 36 3A 3E |
-  209 |  1  s.s    209 | Data        | 11 |         |    8 | 00/83E6 : 23 27 2B 2F |             hex   23272B2F33373B3F
+  482 |  1  s.s    472 | Data        | 11 |         |    8 | 00/8615 : 23 27 2B 2F |             hex     23272B2F33373B3F
       |                |             |    |         |      |           33 37 3B 3F |
-  210 |  1  s.s    210 | Data        | 11 |         |    8 | 00/83EE : 23 27 2B 2F |             hex   23272B2F33373B3F
+  483 |  1  s.s    473 | Data        | 11 |         |    8 | 00/861D : 23 27 2B 2F |             hex     23272B2F33373B3F
       |                |             |    |         |      |           33 37 3B 3F |
-  211 |  1  s.s    211 | Data        | 11 |         |    8 | 00/83F6 : 20 24 28 2C |             hex   2024282C3034383C
+  484 |  1  s.s    474 | Data        | 11 |         |    8 | 00/8625 : 20 24 28 2C |             hex     2024282C3034383C
       |                |             |    |         |      |           30 34 38 3C |
-  212 |  1  s.s    212 | Data        | 11 |         |    8 | 00/83FE : 20 24 28 2C |             hex   2024282C3034383C
+  485 |  1  s.s    475 | Data        | 11 |         |    8 | 00/862D : 20 24 28 2C |             hex     2024282C3034383C
       |                |             |    |         |      |           30 34 38 3C |
-  213 |  1  s.s    213 | Data        | 11 |         |    8 | 00/8406 : 21 25 29 2D |             hex   2125292D3135393D
+  486 |  1  s.s    476 | Data        | 11 |         |    8 | 00/8635 : 21 25 29 2D |             hex     2125292D3135393D
       |                |             |    |         |      |           31 35 39 3D |
-  214 |  1  s.s    214 | Data        | 11 |         |    8 | 00/840E : 21 25 29 2D |             hex   2125292D3135393D
+  487 |  1  s.s    477 | Data        | 11 |         |    8 | 00/863D : 21 25 29 2D |             hex     2125292D3135393D
       |                |             |    |         |      |           31 35 39 3D |
-  215 |  1  s.s    215 | Data        | 11 |         |    8 | 00/8416 : 22 26 2A 2E |             hex   22262A2E32363A3E
+  488 |  1  s.s    478 | Data        | 11 |         |    8 | 00/8645 : 22 26 2A 2E |             hex     22262A2E32363A3E
       |                |             |    |         |      |           32 36 3A 3E |
-  216 |  1  s.s    216 | Data        | 11 |         |    8 | 00/841E : 22 26 2A 2E |             hex   22262A2E32363A3E
+  489 |  1  s.s    479 | Data        | 11 |         |    8 | 00/864D : 22 26 2A 2E |             hex     22262A2E32363A3E
       |                |             |    |         |      |           32 36 3A 3E |
-  217 |  1  s.s    217 | Data        | 11 |         |    8 | 00/8426 : 23 27 2B 2F |             hex   23272B2F33373B3F
+  490 |  1  s.s    480 | Data        | 11 |         |    8 | 00/8655 : 23 27 2B 2F |             hex     23272B2F33373B3F
       |                |             |    |         |      |           33 37 3B 3F |
-  218 |  1  s.s    218 | Data        | 11 |         |    8 | 00/842E : 23 27 2B 2F |             hex   23272B2F33373B3F
+  491 |  1  s.s    481 | Data        | 11 |         |    8 | 00/865D : 23 27 2B 2F |             hex     23272B2F33373B3F
       |                |             |    |         |      |           33 37 3B 3F |
-  219 |  1  s.s    219 | Data        | 11 |         |    8 | 00/8436 : 20 24 28 2C |             hex   2024282C3034383C
+  492 |  1  s.s    482 | Data        | 11 |         |    8 | 00/8665 : 20 24 28 2C |             hex     2024282C3034383C
       |                |             |    |         |      |           30 34 38 3C |
-  220 |  1  s.s    220 | Data        | 11 |         |    8 | 00/843E : 20 24 28 2C |             hex   2024282C3034383C
+  493 |  1  s.s    483 | Data        | 11 |         |    8 | 00/866D : 20 24 28 2C |             hex     2024282C3034383C
       |                |             |    |         |      |           30 34 38 3C |
-  221 |  1  s.s    221 | Data        | 11 |         |    8 | 00/8446 : 21 25 29 2D |             hex   2125292D3135393D
+  494 |  1  s.s    484 | Data        | 11 |         |    8 | 00/8675 : 21 25 29 2D |             hex     2125292D3135393D
       |                |             |    |         |      |           31 35 39 3D |
-  222 |  1  s.s    222 | Data        | 11 |         |    8 | 00/844E : 21 25 29 2D |             hex   2125292D3135393D
+  495 |  1  s.s    485 | Data        | 11 |         |    8 | 00/867D : 21 25 29 2D |             hex     2125292D3135393D
       |                |             |    |         |      |           31 35 39 3D |
-  223 |  1  s.s    223 | Data        | 11 |         |    8 | 00/8456 : 22 26 2A 2E |             hex   22262A2E32363A3E
+  496 |  1  s.s    486 | Data        | 11 |         |    8 | 00/8685 : 22 26 2A 2E |             hex     22262A2E32363A3E
       |                |             |    |         |      |           32 36 3A 3E |
-  224 |  1  s.s    224 | Data        | 11 |         |    8 | 00/845E : 22 26 2A 2E |             hex   22262A2E32363A3E
+  497 |  1  s.s    487 | Data        | 11 |         |    8 | 00/868D : 22 26 2A 2E |             hex     22262A2E32363A3E
       |                |             |    |         |      |           32 36 3A 3E |
-  225 |  1  s.s    225 | Data        | 11 |         |    8 | 00/8466 : 23 27 2B 2F |             hex   23272B2F33373B3F
+  498 |  1  s.s    488 | Data        | 11 |         |    8 | 00/8695 : 23 27 2B 2F |             hex     23272B2F33373B3F
       |                |             |    |         |      |           33 37 3B 3F |
-  226 |  1  s.s    226 | Data        | 11 |         |    8 | 00/846E : 23 27 2B 2F |             hex   23272B2F33373B3F
+  499 |  1  s.s    489 | Data        | 11 |         |    8 | 00/869D : 23 27 2B 2F |             hex     23272B2F33373B3F
       |                |             |    |         |      |           33 37 3B 3F |
-  227 |  1  s.s    227 | Data        | 11 |         |    8 | 00/8476 : 00 00 00 00 | lo          hex   0000000000000000
+  500 |  1  s.s    490 | Data        | 11 |         |    8 | 00/86A5 : 00 00 00 00 | lo          hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  228 |  1  s.s    228 | Data        | 11 |         |    8 | 00/847E : 80 80 80 80 |             hex   8080808080808080
+  501 |  1  s.s    491 | Data        | 11 |         |    8 | 00/86AD : 80 80 80 80 |             hex     8080808080808080
       |                |             |    |         |      |           80 80 80 80 |
-  229 |  1  s.s    229 | Data        | 11 |         |    8 | 00/8486 : 00 00 00 00 |             hex   0000000000000000
+  502 |  1  s.s    492 | Data        | 11 |         |    8 | 00/86B5 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  230 |  1  s.s    230 | Data        | 11 |         |    8 | 00/848E : 80 80 80 80 |             hex   8080808080808080
+  503 |  1  s.s    493 | Data        | 11 |         |    8 | 00/86BD : 80 80 80 80 |             hex     8080808080808080
       |                |             |    |         |      |           80 80 80 80 |
-  231 |  1  s.s    231 | Data        | 11 |         |    8 | 00/8496 : 00 00 00 00 |             hex   0000000000000000
+  504 |  1  s.s    494 | Data        | 11 |         |    8 | 00/86C5 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  232 |  1  s.s    232 | Data        | 11 |         |    8 | 00/849E : 80 80 80 80 |             hex   8080808080808080
+  505 |  1  s.s    495 | Data        | 11 |         |    8 | 00/86CD : 80 80 80 80 |             hex     8080808080808080
       |                |             |    |         |      |           80 80 80 80 |
-  233 |  1  s.s    233 | Data        | 11 |         |    8 | 00/84A6 : 00 00 00 00 |             hex   0000000000000000
+  506 |  1  s.s    496 | Data        | 11 |         |    8 | 00/86D5 : 00 00 00 00 |             hex     0000000000000000
       |                |             |    |         |      |           00 00 00 00 |
-  234 |  1  s.s    234 | Data        | 11 |         |    8 | 00/84AE : 80 80 80 80 |             hex   8080808080808080
+  507 |  1  s.s    497 | Data        | 11 |         |    8 | 00/86DD : 80 80 80 80 |             hex     8080808080808080
       |                |             |    |         |      |           80 80 80 80 |
-  235 |  1  s.s    235 | Data        | 11 |         |    8 | 00/84B6 : 28 28 28 28 |             hex   2828282828282828
+  508 |  1  s.s    498 | Data        | 11 |         |    8 | 00/86E5 : 28 28 28 28 |             hex     2828282828282828
       |                |             |    |         |      |           28 28 28 28 |
-  236 |  1  s.s    236 | Data        | 11 |         |    8 | 00/84BE : A8 A8 A8 A8 |             hex   A8A8A8A8A8A8A8A8
+  509 |  1  s.s    499 | Data        | 11 |         |    8 | 00/86ED : A8 A8 A8 A8 |             hex     A8A8A8A8A8A8A8A8
       |                |             |    |         |      |           A8 A8 A8 A8 |
-  237 |  1  s.s    237 | Data        | 11 |         |    8 | 00/84C6 : 28 28 28 28 |             hex   2828282828282828
+  510 |  1  s.s    500 | Data        | 11 |         |    8 | 00/86F5 : 28 28 28 28 |             hex     2828282828282828
       |                |             |    |         |      |           28 28 28 28 |
-  238 |  1  s.s    238 | Data        | 11 |         |    8 | 00/84CE : A8 A8 A8 A8 |             hex   A8A8A8A8A8A8A8A8
+  511 |  1  s.s    501 | Data        | 11 |         |    8 | 00/86FD : A8 A8 A8 A8 |             hex     A8A8A8A8A8A8A8A8
       |                |             |    |         |      |           A8 A8 A8 A8 |
-  239 |  1  s.s    239 | Data        | 11 |         |    8 | 00/84D6 : 28 28 28 28 |             hex   2828282828282828
+  512 |  1  s.s    502 | Data        | 11 |         |    8 | 00/8705 : 28 28 28 28 |             hex     2828282828282828
       |                |             |    |         |      |           28 28 28 28 |
-  240 |  1  s.s    240 | Data        | 11 |         |    8 | 00/84DE : A8 A8 A8 A8 |             hex   A8A8A8A8A8A8A8A8
+  513 |  1  s.s    503 | Data        | 11 |         |    8 | 00/870D : A8 A8 A8 A8 |             hex     A8A8A8A8A8A8A8A8
       |                |             |    |         |      |           A8 A8 A8 A8 |
-  241 |  1  s.s    241 | Data        | 11 |         |    8 | 00/84E6 : 28 28 28 28 |             hex   2828282828282828
+  514 |  1  s.s    504 | Data        | 11 |         |    8 | 00/8715 : 28 28 28 28 |             hex     2828282828282828
       |                |             |    |         |      |           28 28 28 28 |
-  242 |  1  s.s    242 | Data        | 11 |         |    8 | 00/84EE : A8 A8 A8 A8 |             hex   A8A8A8A8A8A8A8A8
+  515 |  1  s.s    505 | Data        | 11 |         |    8 | 00/871D : A8 A8 A8 A8 |             hex     A8A8A8A8A8A8A8A8
       |                |             |    |         |      |           A8 A8 A8 A8 |
-  243 |  1  s.s    243 | Data        | 11 |         |    8 | 00/84F6 : 50 50 50 50 |             hex   5050505050505050
+  516 |  1  s.s    506 | Data        | 11 |         |    8 | 00/8725 : 50 50 50 50 |             hex     5050505050505050
       |                |             |    |         |      |           50 50 50 50 |
-  244 |  1  s.s    244 | Data        | 11 |         |    8 | 00/84FE : D0 D0 D0 D0 |             hex   D0D0D0D0D0D0D0D0
+  517 |  1  s.s    507 | Data        | 11 |         |    8 | 00/872D : D0 D0 D0 D0 |             hex     D0D0D0D0D0D0D0D0
       |                |             |    |         |      |           D0 D0 D0 D0 |
-  245 |  1  s.s    245 | Data        | 11 |         |    8 | 00/8506 : 50 50 50 50 |             hex   5050505050505050
+  518 |  1  s.s    508 | Data        | 11 |         |    8 | 00/8735 : 50 50 50 50 |             hex     5050505050505050
       |                |             |    |         |      |           50 50 50 50 |
-  246 |  1  s.s    246 | Data        | 11 |         |    8 | 00/850E : D0 D0 D0 D0 |             hex   D0D0D0D0D0D0D0D0
+  519 |  1  s.s    509 | Data        | 11 |         |    8 | 00/873D : D0 D0 D0 D0 |             hex     D0D0D0D0D0D0D0D0
       |                |             |    |         |      |           D0 D0 D0 D0 |
-  247 |  1  s.s    247 | Data        | 11 |         |    8 | 00/8516 : 50 50 50 50 |             hex   5050505050505050
+  520 |  1  s.s    510 | Data        | 11 |         |    8 | 00/8745 : 50 50 50 50 |             hex     5050505050505050
       |                |             |    |         |      |           50 50 50 50 |
-  248 |  1  s.s    248 | Data        | 11 |         |    8 | 00/851E : D0 D0 D0 D0 |             hex   D0D0D0D0D0D0D0D0
+  521 |  1  s.s    511 | Data        | 11 |         |    8 | 00/874D : D0 D0 D0 D0 |             hex     D0D0D0D0D0D0D0D0
       |                |             |    |         |      |           D0 D0 D0 D0 |
-  249 |  1  s.s    249 | Data        | 11 |         |    8 | 00/8526 : 50 50 50 50 |             hex   5050505050505050
+  522 |  1  s.s    512 | Data        | 11 |         |    8 | 00/8755 : 50 50 50 50 |             hex     5050505050505050
       |                |             |    |         |      |           50 50 50 50 |
-  250 |  1  s.s    250 | Data        | 11 |         |    8 | 00/852E : D0 D0 D0 D0 |             hex   D0D0D0D0D0D0D0D0
+  523 |  1  s.s    513 | Data        | 11 |         |    8 | 00/875D : D0 D0 D0 D0 |             hex     D0D0D0D0D0D0D0D0
       |                |             |    |         |      |           D0 D0 D0 D0 |
-  251 |  1  s.s    251 | Comment     | 11 |         |    0 | 00/8536               | *
-  252 |  1  s.s    252 | Empty       | 11 |         |    0 | 00/8536               |                                  
-  253 |  1  s.s    253 | Empty       | 11 |         |    0 | 00/8536               |                                  
+  524 |  1  s.s    514 | Comment     | 11 |         |    0 | 00/8765               | *
+  525 |  1  s.s    515 | Empty       | 11 |         |    0 | 00/8765               |                                    
 ------+----------------+-------------+----+---------+------+-----------------------+-------------------------------------------------------------------

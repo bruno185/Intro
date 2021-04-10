@@ -1,0 +1,57 @@
+------+------------------+-------------+----+---------+------+-----------------------+-------------------------------------------------------------------
+ Line | # File      Line | Line Type   | MX |  Reloc  | Size | Address   Object Code |  Source Code                                                      
+------+------------------+-------------+----+---------+------+-----------------------+-------------------------------------------------------------------
+    1 |  1 test.s      1 | Comment     | 11 |         |    0 | 00/8000               | * ROM routines
+    2 |  1 test.s      2 | Directive   | 11 |         |    0 | 00/8000               |             lst   off            
+    3 |  1 test.s      3 | Comment     | 11 |         |    0 | 00/8000               | *
+    4 |  1 test.s      4 | Equivalence | 11 |         |    0 | 00/8000               | home        equ   $FC58          
+    5 |  1 test.s      5 | Equivalence | 11 |         |    0 | 00/8000               | text        equ   $FB2F          
+    6 |  1 test.s      6 | Equivalence | 11 |         |    0 | 00/8000               | col80off    equ   $C00C          
+    7 |  1 test.s      7 | Equivalence | 11 |         |    0 | 00/8000               | cout        equ   $FDED          
+    8 |  1 test.s      8 | Equivalence | 11 |         |    0 | 00/8000               | vtab        equ   $FC22          
+    9 |  1 test.s      9 | Equivalence | 11 |         |    0 | 00/8000               | getln       equ   $FD6A          
+   10 |  1 test.s     10 | Equivalence | 11 |         |    0 | 00/8000               | bascalc     equ   $FBC1          
+   11 |  1 test.s     11 | Equivalence | 11 |         |    0 | 00/8000               | cr          equ   $FD8E          ; print carriage return
+   12 |  1 test.s     12 | Equivalence | 11 |         |    0 | 00/8000               | clreop      equ   $FC42          ; clear from cursor to end of page
+   13 |  1 test.s     13 | Equivalence | 11 |         |    0 | 00/8000               | clreol      equ   $FC9C          ; clear from cursor to end of line
+   14 |  1 test.s     14 | Equivalence | 11 |         |    0 | 00/8000               | xtohex      equ   $F944          
+   15 |  1 test.s     15 | Equivalence | 11 |         |    0 | 00/8000               | rdkey       equ   $FD0C          ; wait for keypress
+   16 |  1 test.s     16 | Equivalence | 11 |         |    0 | 00/8000               | auxmov      equ   $C311          
+   17 |  1 test.s     17 | Equivalence | 11 |         |    0 | 00/8000               | xfer        equ   $C314          
+   18 |  1 test.s     18 | Equivalence | 11 |         |    0 | 00/8000               | wait        equ   $FCA8          
+   19 |  1 test.s     19 | Empty       | 11 |         |    0 | 00/8000               |                                  
+   20 |  1 test.s     20 | Comment     | 11 |         |    0 | 00/8000               | * ROM switches
+   21 |  1 test.s     21 | Comment     | 11 |         |    0 | 00/8000               | *
+   22 |  1 test.s     22 | Equivalence | 11 |         |    0 | 00/8000               | graphics    equ   $C050          
+   23 |  1 test.s     23 | Equivalence | 11 |         |    0 | 00/8000               | mixoff      equ   $C052          
+   24 |  1 test.s     24 | Equivalence | 11 |         |    0 | 00/8000               | hires       equ   $C057          
+   25 |  1 test.s     25 | Equivalence | 11 |         |    0 | 00/8000               | page1       equ   $C054          
+   26 |  1 test.s     26 | Equivalence | 11 |         |    0 | 00/8000               | page2       equ   $C055          
+   27 |  1 test.s     27 | Equivalence | 11 |         |    0 | 00/8000               | clr80col    equ   $C000          
+   28 |  1 test.s     28 | Equivalence | 11 |         |    0 | 00/8000               | vbl         equ   $C019          
+   29 |  1 test.s     29 | Equivalence | 11 |         |    0 | 00/8000               | spkr        equ   $C030          
+   30 |  1 test.s     30 | Comment     | 11 |         |    0 | 00/8000               | *
+   31 |  1 test.s     31 | Equivalence | 11 |         |    0 | 00/8000               | ptr         equ   $06            
+   32 |  1 test.s     32 | Equivalence | 11 |         |    0 | 00/8000               | ptr2        equ   $08            
+   33 |  1 test.s     33 | Comment     | 11 |         |    0 | 00/8000               | * 
+   34 |  1 test.s     34 | Comment     | 11 |         |    0 | 00/8000               | * CONST
+   35 |  1 test.s     35 | Equivalence | 11 |         |    0 | 00/8000               | framemax    equ   $09            
+   36 |  1 test.s     36 | Equivalence | 11 |         |    0 | 00/8000               | posx        equ   $05            ; position in X (in byte, not pixel)
+   37 |  1 test.s     37 | Equivalence | 11 |         |    0 | 00/8000               | posy        equ   $3F            ; position in Y (= line #)
+   38 |  1 test.s     38 | Equivalence | 11 |         |    0 | 00/8000               | posx2       equ   $0F            
+   39 |  1 test.s     39 | Equivalence | 11 |         |    0 | 00/8000               | posy2       equ   $96            
+   40 |  1 test.s     40 | Equivalence | 11 |         |    0 | 00/8000               | delay       equ   $01            
+   41 |  1 test.s     41 | Comment     | 11 |         |    0 | 00/8000               | *
+   42 |  1 test.s     42 | Directive   | 11 |         |    0 | 00/8000               |             org   $8000          
+   43 |  1 test.s     43 | Empty       | 11 |         |    0 | 00/8000               |                                  
+   44 |  1 test.s     44 | Comment     | 11 |         |    0 | 00/8000               | * * * * * * * * *
+   45 |  1 test.s     45 | Comment     | 11 |         |    0 | 00/8000               | *     MACROS    *
+   46 |  1 test.s     46 | Comment     | 11 |         |    0 | 00/8000               | * * * * * * * * *
+   47 |  1 test.s     47 | Comment     | 11 |         |    0 | 00/8000               | *
+   48 |  1 test.s     48 | Directive   | 11 |         |    0 | 00/8000               |             DO    0              
+   49 |  1 test.s     80 | Directive   | 11 |         |    0 | 00/8000               |             FIN                  
+   50 |  1 test.s     81 | Empty       | 11 |         |    0 | 00/8000               |                                  
+   51 |  1 test.s     82 | Comment     | 11 |         |    0 | 00/8000               | * BEGIN
+   52 |  1 test.s     83 | Code        | 11 |         |    1 | 00/8000 : 60          |             rts                  
+   53 |  1 test.s     84 | Empty       | 11 |         |    0 | 00/8001               |                                  
+------+------------------+-------------+----+---------+------+-----------------------+-------------------------------------------------------------------
