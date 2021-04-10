@@ -75,7 +75,7 @@ donote  MAC
         EOM
 
 * init. variables 
-* posx, posy, nbcol, nblig, left, right, top bottom
+* params : posx, posy, nbcol, nblig, left, right, top bottom
 setvar  MAC
         lda ]1          ; posx      
         sta ]5          ; left
@@ -100,6 +100,34 @@ n3      lda #$BF
 n4      nop
         EOM
         FIN
+
+* display a bitmap
+* params : data pointer, top, left, right, bottom
+bitmap  MAC
+        lda #>]1   ; (re)init shape pointer
+        sta load2+2
+        lda #<]1
+        sta load2+1
+newln2  ldx ]2         ; outter loop starts here, top
+        lda hi,x        ; from top to botton
+        sta ptr+1
+        lda lo,x 
+        sta ptr
+        ldy ]3          ; left
+load2   lda ]1       ; inner loop starts here
+        sta (ptr),y     ; from left to right
+        inc load2+1      ; update shape pointer
+        bne ok2
+        inc load2+2
+ok2     iny             ; next byte un row
+        cpy ]4       ; end of line ? (right)
+        bne load2
+        inc ]2          ; top+1
+        lda ]2
+        cmp ]5      ; last line ? (bottom)
+        beq endshap2
+        jmp newln2
+endshap2 EOM
 
 * BEGIN
 * setup vars for limits in HGR screen
@@ -180,35 +208,11 @@ endprog lda saveptr
         sta play3+2
 
         setvar #posx2;#posy2;nbcol2;nblig2;left;right;top;bottom
-        jsr shapehk
+        bitmap hitk;top;left;right;bottom
         rts             ; end of program
 *
 *
-shapehk lda #>hitk   ; (re)init shape pointer
-        sta load2+2
-        lda #<hitk
-        sta load2+1
-newln2  ldx top         ; outter loop starts here
-        lda hi,x        ; from top to botton
-        sta ptr+1
-        lda lo,x 
-        sta ptr
-        ldy left
-load2   lda hitk     ; inner loop starts here
-        sta (ptr),y     ; from left to right
-        inc load2+1      ; update shape pointer
-        bne ok2
-        inc load2+2
-ok2     iny             ; next byte un row
-        cpy right       ; end of line ?
-        bne load2
-        inc top
-        lda top
-        cmp bottom      ; last line ?
-        beq endshap2
-        jmp newln2
-endshap2 rts
-
+*
 play    lda tune        ; self modified address
         beq playend
         sta pitch       ; set pitch
