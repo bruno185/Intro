@@ -37,6 +37,9 @@ posx    equ $05         ; position in X (in byte, not pixel)
 posy    equ $3F         ; position in Y (= line #)
 posx2   equ $0F 
 posy2   equ $64
+posx3   equ $01
+posy3   equ $97
+
 delay   equ $01  
 *
         org   $8000
@@ -130,7 +133,7 @@ ok2     iny             ; next byte un row
 endshap2 EOM
 
 * BEGIN
-* setup vars for limits in HGR screen
+* setup vars for shape 1
         setvar #posx;#posy;nbcol;nblig;left;right;top;bottom
 * save tune pointers
         lda play+1 
@@ -148,7 +151,7 @@ endshap2 EOM
         lda play3+2
         sta saveptr+5
 *
-* paint shape 1
+* paint shape 1 while playing "music"
 *
         lda #>cut       ; (re)init shape pointer
         sta load+2
@@ -169,7 +172,7 @@ ok      iny             ; next byte un row
         cpy right       ; end of line ?
         bne load
 *
-        lda top         ; play evrery 4 lines
+        lda top         ; play every 4 lines
         and #03
         bne noplay
         jsr play
@@ -180,8 +183,7 @@ noplay  inc top
         beq endtune
         jmp newline
 *
-endtune 
-        lda play+1      ; get value 
+endtune lda play+1      ; get value 
         sta ptr2        ; pointed by play+1
         lda play+2      ; to check tune has finished
         sta ptr2+1
@@ -206,12 +208,18 @@ endprog lda saveptr
         sta play3+1
         lda saveptr+5  
         sta play3+2
-
+* 
+* Display hit a key 
         setvar #posx2;#posy2;nbcol2;nblig2;left;right;top;bottom
         bitmap hitk;top;left;right;bottom
+*
+* Display 3 wolves
+        setvar #posx3;#posy3;nbcol3;nblig3;left;right;top;bottom
+        bitmap loup3;top;left;right;bottom
+
         rts             ; end of program
 *
-*
+* setup a note from note list ans play it
 *
 play    lda tune        ; self modified address
         beq playend
@@ -228,8 +236,12 @@ play3   lda tune+2      ; self modified address
         jsr sound       ; play a note
 playend rts
 
+* space for saving pointers
+* inside code (self modified)
 saveptr ds 6,0
 *
+* tune = note list : pitch / duration hi / duration lo
+* 00 = flag for end of list
 tune    hex 5203A4      ; note20
         hex 52020B      ; note20
         hex 4E03DB      ; note21
@@ -359,113 +371,304 @@ hitk     hex   0000000000000000
          hex   001e000000000000
          hex   000000
 *
-nblig   hex   1c                        ; tribute...
-nbcol   hex   1e
-cut     hex   0000000000000000
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   0000000000007001
-        hex   3000180300180000
-        hex   1800000078330000
-        hex   604c190306306000
-        hex   0000000018033000
-        hex   0003001800001800
-        hex   004c61300000604c
-        hex   0103067070000030
-        hex   060018037879191f
-        hex   667c78007c78004c
-        hex   61704307604c1963
-        hex   0770797878310600
-        hex   1803303818336618
-        hex   4c01184c01006030
-        hex   660c604c19330630
-        hex   6f40190300007803
-        hex   3018183366187c01
-        hex   184c01006030660f
-        hex   604c193306306678
-        hex   1903000018033018
-        hex   183366180c00184c
-        hex   010060306600407f
-        hex   18330630604c1903
-        hex   000018036019181f
-        hex   7c70780070780000
-        hex   6030460700331863
-        hex   0730607819030000
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   0000000060010000
-        hex   00003c400f600300
-        hex   3800000000000000
-        hex   0000000000000000
-        hex   0000300000000000
-        hex   6640193006000c00
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   787971713f006640
-        hex   193000003e3c7c00
-        hex   0600000000000000
-        hex   0000000000003038
-        hex   1833660066400f30
-        hex   00000c661c000600
-        hex   0000000000000000
-        hex   0000000030181833
-        hex   66007e4019300000
-        hex   0c660c0000000000
-        hex   0000000000000000
-        hex   0000301818336600
-        hex   664c193366000c66
-        hex   0c00060000000000
-        hex   0000000000000000
-        hex   301870316600664c
-        hex   0f6363000c3c0c00
-        hex   0600000000000000
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   0000030000000000
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   0000003000007063
-        hex   0c0300001800003e
-        hex   6000000000180000
-        hex   0000000000006000
-        hex   1833000030060003
-        hex   0000180000633000
-        hex   0000001800004c01
-        hex   0000000060001833
-        hex   60033046470f0f00
-        hex   1f33000378186363
-        hex   0c1f1e3e4c017878
-        hex   7161630c00300006
-        hex   70630c4319401933
-        hex   00734c1903664c19
-        hex   306600004c390033
-        hex   6606003060073066
-        hex   0f431f4019330063
-        hex   7c1963674c193e66
-        hex   00000c1870336007
-        hex   0030300630660043
-        hex   0140193300630c70
-        hex   31664c1933660000
-        hex   4c191833660c0070
-        hex   63077043070e0f00
-        hex   1f3e003e78606047
-        hex   0f1f3e6600007818
-        hex   7063630c00000000
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   0000000000000000
-        hex   0000000000000000
+nblig    hex   1b
+nbcol    hex   1e
+cut      hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000070
+         hex   0130001803001800
+         hex   0018000000783300
+         hex   00604c1903063060
+         hex   0000000000180330
+         hex   0000030018000018
+         hex   0000006030000060
+         hex   4c01030670700000
+         hex   0000001803787919
+         hex   1f667c78007c7800
+         hex   0060704307604c19
+         hex   6307707978780100
+         hex   0018033038183366
+         hex   184c01184c010060
+         hex   30660c604c193306
+         hex   306f401903000078
+         hex   033018183366187c
+         hex   01184c0100603066
+         hex   0f604c1933063066
+         hex   7819030000180330
+         hex   18183366180c0018
+         hex   4c01006030660040
+         hex   7f18330630604c19
+         hex   0300001803601918
+         hex   1f7c707800707800
+         hex   0060304607003318
+         hex   6307306078190300
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   000000001c000000
+         hex   00400778013c0000
+         hex   0700000000000000
+         hex   0000000000000000
+         hex   0000060000000060
+         hex   0c18036600400100
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   1f1f1e7e07600c18
+         hex   0306006047470f00
+         hex   0000000000000000
+         hex   0000000000000607
+         hex   33660c600c780106
+         hex   0040614c03000000
+         hex   0000000000000000
+         hex   0000000006033366
+         hex   0c600f1803060040
+         hex   614c010000000000
+         hex   0000000000000000
+         hex   0000060333660c60
+         hex   4c1933660c40614c
+         hex   0100000000000000
+         hex   0000000000000000
+         hex   06031e660c604c79
+         hex   313c0c4041470100
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0040010000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000001800007831
+         hex   460100000c00001f
+         hex   30000000000c0000
+         hex   0000000000003000
+         hex   4c19000018034001
+         hex   00000c0040311800
+         hex   0000000c00006600
+         hex   0000000030004c19
+         hex   7001186363470740
+         hex   4f1940013c4c7131
+         hex   460f0f1f66003c7c
+         hex   7870310600180003
+         hex   783146610c604c19
+         hex   4039664c0133660c
+         hex   18330000661c4019
+         hex   3303001870031873
+         hex   47610f604c194031
+         hex   7e4c7133660c1f33
+         hex   0000060c78197003
+         hex   0018180318334061
+         hex   00604c1940310678
+         hex   1833664c19330000
+         hex   660c4c1933060078
+         hex   7103786103470740
+         hex   0f1f001f3c307063
+         hex   470f1f3300003c0c
+         hex   7871310600000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000
+*
+nblig3   hex   29
+nbcol3   hex   25
+loup3    hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000084900000
+         hex   0000820000000000
+         hex   000000000000a000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   701f7f1f00008918
+         hex   0000000000000000
+         hex   0000840207000000
+         hex   0000000000000000
+         hex   0000000000e47f7f
+         hex   7fefcc9d78000000
+         hex   000000c0ecfe8ce6
+         hex   840f000000000000
+         hex   0000000000006000
+         hex   00007cf3ef7fffcc
+         hex   3fe9030000000092
+         hex   707fefbcb61f3e00
+         hex   0000000000000000
+         hex   00001060030000fc
+         hex   e87f7fef777fed0f
+         hex   00000000ffed7f7f
+         hex   f3ef7f7d01000000
+         hex   00000000000000e7
+         hex   a60f00009ef17f7f
+         hex   9fb3fbf79f000000
+         hex   d0cf7f7f6fcdfd7f
+         hex   7f01000000000000
+         hex   000000c8b9b73f00
+         hex   00ad787f7fefcc7f
+         hex   7fbb00000030837f
+         hex   7f7fdbd97d6f0100
+         hex   0000000000000000
+         hex   ecdf7ffe00009b70
+         hex   3fffbefbfd7fad00
+         hex   0000f8017ff7dfbd
+         hex   beffdf8500000000
+         hex   00000000e0b6fb7f
+         hex   ef010087687f7f7f
+         hex   cffb7f3b0000003c
+         hex   00fe7f7eb7f7f63f
+         hex   8300000000000000
+         hex   00dcdbe57fff00c0
+         hex   03707fdbdf793fff
+         hex   a7000000fc00fd3f
+         hex   7fdfb9ffff840000
+         hex   0000300000603fed
+         hex   f67eef016081606f
+         hex   edbbcfdd7fff0000
+         hex   000c81fe7f7e3f1e
+         hex   7f7f07000000007c
+         hex   a5fe7f7fb3fbfd9f
+         hex   836000a0ffcc9ff3
+         hex   f97f3f8100009e00
+         hex   3c7f39cfd97d7f1f
+         hex   000000007ff77f7f
+         hex   7fdfdd7f3f81c800
+         hex   c03fa3f6cdb77f6f
+         hex   83000099007ccff9
+         hex   b7f64effcc000000
+         hex   00ef7e7f7f7fede6
+         hex   7d7f05b000a0fe20
+         hex   7e3c7e4f4f050000
+         hex   8e0074bddccf99fb
+         hex   b6ab000000c09ff9
+         hex   ef7f7eb7fb6e7f83
+         hex   9200a09f81d97337
+         hex   cfcd820000a70070
+         hex   8f98ffe6b69b4100
+         hex   0000a09b787f777f
+         hex   dbddfded8e8c0000
+         hex   9b00e6b3fe073984
+         hex   00009b00f096e4db
+         hex   e7cce58400000060
+         hex   a7787f3f6fbfe6db
+         hex   b9300100c0890099
+         hex   b3f7069000000003
+         hex   00308b90fb9d8b00
+         hex   820000006086787f
+         hex   dbfddff9fc910300
+         hex   00e8a100e4b3e601
+         hex   0000000003007085
+         hex   90b3ee8c00000000
+         hex   00f081726fcfd97f
+         hex   e68ec0820000bca6
+         hex   00c4b39681000000
+         hex   608100f08400317e
+         hex   830000000000b882
+         hex   787f8de7f3998300
+         hex   000000928d0098bb
+         hex   a600000000c08100
+         hex   fc00c088b7070000
+         hex   000000d881687f93
+         hex   98efe68400000000
+         hex   848e00c0bc940000
+         hex   0000a08200ec8400
+         hex   a2fe840000000000
+         hex   1800c8df07e4ecd7
+         hex   0000000000828d00
+         hex   90df890000000090
+         hex   0000b4030090fd01
+         hex   0000000000cc0060
+         hex   7e8d90f2ab010000
+         hex   0000060600e07e81
+         hex   0000000000000070
+         hex   0400c8ed00000000
+         hex   00000600a07f8300
+         hex   60ff000000000084
+         hex   0300f0fc82000000
+         hex   0000000040930010
+         hex   3900000000004089
+         hex   00c0ed850060cf00
+         hex   0000000082820030
+         hex   bb00000000000000
+         hex   0000870018990000
+         hex   00000090810000fe
+         hex   8200609d00000000
+         hex   00a40000f0bc0000
+         hex   000000000000008e
+         hex   00c8a40000000000
+         hex   988100a0b98100a0
+         hex   ae00000000c0c081
+         hex   00f8920000000000
+         hex   000000009c008cd0
+         hex   0000000000890000
+         hex   00ef0000c0950000
+         hex   0000008182002c8b
+         hex   0000000000000000
+         hex   00b2009200010000
+         hex   00c081000000ed00
+         hex   0000990100000000
+         hex   8281009c8c000000
+         hex   000000000000d800
+         hex   0640040000000000
+         hex   0000c09d81000086
+         hex   9300000000848200
+         hex   9990000000000000
+         hex   000000c890820092
+         hex   0000000000000000
+         hex   9b8100c8818a0000
+         hex   00000081008e8200
+         hex   0000000000000000
+         hex   a0e0000088000000
+         hex   00000000a0e00000
+         hex   a200a00000000000
+         hex   0000890000000000
+         hex   0000000000c08100
+         hex   0092000000000000
+         hex   00008284004000a0
+         hex   00000000008900c5
+         hex   8400000000000000
+         hex   0000008600000000
+         hex   0000000000000081
+         hex   82000000c0000000
+         hex   00008400e2820000
+         hex   0000000000000000
+         hex   8800000000000000
+         hex   0000000082900000
+         hex   00a0000000000000
+         hex   a082000000000000
+         hex   0000000000a40000
+         hex   0000000000000000
+         hex   0081880000000000
+         hex   0000000000a00000
+         hex   0000000000000000
+         hex   0000900000000000
+         hex   0000000000008200
+         hex   0000000000000000
+         hex   0000c08100000000
+         hex   0000000000000000
+         hex   8100000000000000
+         hex   0000000000000000
+         hex   00000000000000a0
+         hex   0000000000000000
+         hex   0000000040010000
+         hex   0000000000000000
+         hex   8400000000000000
+         hex   0000000000850000
+         hex   0000000000000000
+         hex   0000000000000000
+         hex   0000000000980000
+         hex   0000000000
+
 *
 hi      hex 2024282C3034383C
         hex 2024282C3034383C
