@@ -28,6 +28,7 @@ clr80col equ $C000
 vbl      equ $C019    
 spkr     equ $C030 
 *
+* VAR
 ptr     equ $06
 ptr2    equ $08
 * 
