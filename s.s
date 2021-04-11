@@ -67,16 +67,6 @@ addval  MAC
         sta ]1+1
         EOM
 
-donote  MAC
-        lda ]1
-        sta pitch
-        lda ]2
-        sta lengthhi
-        lda ]2+1
-        sta lengthlo
-        jsr sound
-        EOM
-
 * init. variables 
 * params : posx, posy, nbcol, nblig, left, right, top bottom
 setvar  MAC
