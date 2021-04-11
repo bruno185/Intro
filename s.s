@@ -35,7 +35,7 @@ ptr2    equ $08
 framemax equ $09 
 posx    equ $05         ; position in X (in byte, not pixel)
 posy    equ $3F         ; position in Y (= line #)
-posx2   equ $0F 
+posx2   equ $0E  
 posy2   equ $64
 posx3   equ $01
 posy3   equ $97
@@ -121,7 +121,9 @@ ok2     iny             ; next byte un row
         beq endshap2
         jmp newln2
 endshap2 EOM
-
+*
+*
+*
 * BEGIN
 * setup vars for shape 1
         setvar #posx;#posy;nbcol;nblig;left;right;top;bottom
@@ -152,6 +154,7 @@ newline ldx top         ; outter loop starts here
         sta ptr+1
         lda lo,x 
         sta ptr
+* inner loop (line)
         ldy left
 load    lda cut         ; inner loop starts here
         sta (ptr),y     ; from left to right
@@ -192,7 +195,7 @@ endprog lda saveptr
         lda saveptr+2  
         sta play2+1
         lda saveptr+3  
-        sta play3+2
+        sta play2+2
 *
         lda saveptr+4  
         sta play3+1
@@ -223,7 +226,7 @@ play3   lda tune+2      ; self modified address
         addval play2+1;#$03     ; for next note
         addval play3+1;#$03
 *
-        jsr sound       ; play a note
+        jsr sound       ; play the speaker
 playend rts
 
 * space for saving pointers
@@ -345,22 +348,26 @@ right   hex 00
 top     hex 00
 bottom  hex 00
 *   
-nblig2   hex   0b                       ; hit a key...
-nbcol2   hex   09
+* bitmap : hit a key...
+nblig2   hex   0a
+nbcol2   hex   0c
 hitk     hex   0000000000000000
+         hex   000000000c180600
+         hex   0040010000000000
+         hex   0c00060000400100
+         hex   000000007c181f00
+         hex   0f40191e66000000
+         hex   4c19060018400d33
+         hex   660000004c190600
+         hex   1f400f3f66000000
+         hex   4c19064019401903
+         hex   7c604c014c191c00
+         hex   1f40191e60604c01
          hex   0000000000000000
-         hex   0000060c03000060
-         hex   0000000600030000
-         hex   600000003e4c0f40
-         hex   07600c0f33660c03
-         hex   000c60461933660c
-         hex   03400f60471f3366
-         hex   0c03600c604c013e
-         hex   660c0e400f600c0f
-         hex   3000000000000000
-         hex   001e000000000000
-         hex   000000
-*
+         hex   3c00000000000000
+         hex   0000000000000000
+
+* bitmap : tribute to Wild Man
 nblig    hex   1b
 nbcol    hex   1e
 cut      hex   0000000000000000
@@ -466,6 +473,7 @@ cut      hex   0000000000000000
          hex   0000000000000000
          hex   0000
 *
+* bitmap : 3 wolves
 nblig3   hex   29
 nbcol3   hex   25
 loup3    hex   0000000000000000
